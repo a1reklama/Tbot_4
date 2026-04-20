@@ -3,97 +3,113 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Калькулятор выздоровления</title>
+  <title>12</title>
   <style>
     :root{
       --bg:#f5f5f7;
-      --card:rgba(255,255,255,.84);
-      --solid:#fff;
+      --sheet:rgba(255,255,255,.84);
+      --card:#ffffff;
       --text:#1d1d1f;
       --muted:#6e6e73;
       --line:rgba(60,60,67,.18);
-      --accent:#0a84ff;
-      --accent-dark:#0071e3;
+      --blue:#0a84ff;
+      --blue-strong:#0071e3;
+      --blue-soft:rgba(10,132,255,.10);
+      --grey-soft:rgba(60,60,67,.06);
       --danger:#c9342f;
       --shadow:0 18px 40px rgba(0,0,0,.08);
       --r-xl:28px;
       --r-lg:22px;
-      --tap:54px;
+      --tap:52px;
     }
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     html,body{margin:0}
     body{
-      min-height:100vh;color:var(--text);
+      min-height:100vh;
+      color:var(--text);
       font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
-      background:radial-gradient(1200px 700px at 0% -10%, #ffffff 0, #f5f5f7 45%, #edf1f5 100%);
+      background:
+        radial-gradient(1200px 700px at 0% -10%, #ffffff 0, #f5f5f7 45%, #edf1f5 100%);
     }
-    .app{max-width:860px;margin:0 auto;padding:10px 10px 28px}
+    .app{max-width:860px;margin:0 auto;padding:0 0 28px}
     .shell{
-      background:var(--card);
+      background:var(--sheet);
       backdrop-filter:saturate(180%) blur(20px);
       border:1px solid rgba(255,255,255,.72);
-      border-radius:34px;
       box-shadow:var(--shadow);
       overflow:hidden;
+      min-height:100vh;
     }
     .topbar{
       padding:14px 14px 10px;
       border-bottom:1px solid rgba(60,60,67,.08);
-      background:rgba(255,255,255,.55);
+      background:rgba(255,255,255,.58);
+      position:sticky; top:0; z-index:20;
+      backdrop-filter:saturate(180%) blur(18px);
     }
-    .topline{display:flex;justify-content:space-between;gap:10px;align-items:center}
-    .title{font-size:20px;font-weight:700;letter-spacing:-.02em}
-    .stage{font-size:13px;color:var(--muted)}
+    .titleRow{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .titleWrap{display:flex;align-items:center;gap:12px}
+    .badge12{
+      width:40px;height:40px;border-radius:50%;
+      border:2px solid #c9342f;color:#c9342f;font-weight:700;
+      display:flex;align-items:center;justify-content:center;
+      font-size:22px;background:#fff;
+      flex:0 0 auto;
+    }
+    .titleText{font-size:22px;font-weight:700;letter-spacing:-.03em}
+    .stageName{font-size:13px;color:var(--muted)}
     .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
     button,a.btn{
       appearance:none;border:none;cursor:pointer;text-decoration:none;
       min-height:var(--tap);border-radius:999px;padding:0 18px;
       font-size:17px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;
-      transition:transform .06s ease, background .16s ease, border-color .16s ease, opacity .16s ease,color .16s ease
+      transition:transform .06s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease,color .16s ease, opacity .16s ease;
     }
     button:active,a.btn:active{transform:scale(.985)}
-    .primary{background:var(--accent);color:#fff}
-    .primary:hover{background:var(--accent-dark)}
-    .secondary{background:rgba(60,60,67,.08);color:var(--text)}
+    .primary{background:var(--blue);color:#fff}
+    .primary:hover{background:var(--blue-strong)}
+    .secondary{background:var(--grey-soft);color:var(--text)}
     .ghost{background:#fff;border:1px solid var(--line);color:var(--text)}
-    .danger{background:#fff;border:1px solid rgba(201,52,47,.22);color:var(--danger)}
-    .small{min-height:40px;padding:0 14px;font-size:15px}
+    .danger{background:#fff;border:1px solid rgba(201,52,47,.18);color:var(--danger)}
+    .small{min-height:38px;padding:0 14px;font-size:15px}
     .progressWrap{padding:12px 14px 0}
     .progressMeta{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted);margin-bottom:8px}
     .progress{height:8px;background:rgba(60,60,67,.08);border-radius:999px;overflow:hidden}
-    .progress > span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#61b0ff);transition:width .25s ease}
+    .progress>span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--blue),#61b0ff);transition:width .25s ease}
     .screen{padding:18px 14px 12px}
     .eyebrow{font-size:13px;color:var(--muted);margin-bottom:8px}
     h1{font-size:30px;line-height:1.08;letter-spacing:-.03em;margin:0 0 10px}
     .desc{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 16px}
     .card{
-      background:var(--solid);
+      background:var(--card);
       border:1px solid rgba(60,60,67,.1);
       border-radius:var(--r-xl);
       padding:18px;
       box-shadow:0 8px 24px rgba(17,17,17,.04);
       margin-bottom:14px;
     }
-    .soft{
-      background:linear-gradient(180deg,#fff,#fafafc);
-      border:1px solid rgba(60,60,67,.1);
-      border-radius:24px;
-      padding:14px;
-    }
+    .compact{padding:14px}
     input[type=text]{
       width:100%;min-height:58px;border-radius:18px;border:1px solid var(--line);
       padding:0 16px;font-size:19px;outline:none;background:#fff;color:var(--text)
     }
     input[type=text]:focus{border-color:rgba(10,132,255,.45);box-shadow:0 0 0 4px rgba(10,132,255,.12)}
     .hint{margin-top:10px;font-size:14px;color:var(--muted);line-height:1.45}
-    .error{margin-top:12px;padding:14px 16px;border-radius:18px;background:#fff5f4;border:1px solid rgba(201,52,47,.16);color:var(--danger);font-size:14px}
-    .grid{display:grid;gap:10px}
+    .error{margin-top:12px;padding:14px 16px;border-radius:18px;background:#fff5f4;border:1px solid rgba(201,52,47,.16);color:var(--danger);font-size:14px;line-height:1.45}
     .scoreGrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
-    .scoreBtn{min-height:58px;border-radius:18px;background:#fff;border:1px solid var(--line);font-size:20px;font-weight:700}
+    .scoreBtn{
+      min-height:58px;border-radius:18px;background:#fff;border:1px solid var(--line);
+      font-size:20px;font-weight:700;box-shadow:0 1px 0 rgba(255,255,255,.7) inset
+    }
     .scoreBtn.active{background:#111;color:#fff;border-color:#111}
     .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{min-height:38px;padding:0 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:15px;font-weight:600}
+    .chip{
+      min-height:38px;padding:0 14px;border-radius:999px;background:#fff;border:1px solid var(--line);
+      font-size:15px;font-weight:600
+    }
     .chip.on{background:#111;color:#fff;border-color:#111}
+    .chip.soft{background:var(--blue-soft);border-color:transparent;color:var(--blue-strong)}
+    .sectionTitle{font-size:16px;font-weight:700;margin-bottom:10px}
     .list{display:grid;gap:10px}
     .row{
       display:flex;justify-content:space-between;align-items:center;gap:10px;
@@ -107,9 +123,26 @@
     .answers{display:grid;gap:10px;margin-top:16px}
     .answers button{width:100%;background:#fff;border:1px solid var(--line);color:var(--text)}
     .summaryGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-    .summaryCard{padding:16px;border-radius:24px;background:#fff;border:1px solid var(--line)}
+    .summaryCard{
+      padding:16px;border-radius:24px;background:#fff;border:1px solid var(--line);
+      transition:transform .16s ease, box-shadow .16s ease;
+    }
     .summaryCard .k{font-size:14px;color:var(--muted);margin-bottom:8px}
-    .summaryCard .v{font-size:34px;font-weight:700;letter-spacing:-.04em}
+    .summaryCard .v{font-size:36px;font-weight:700;letter-spacing:-.04em}
+    .tone-low{background:linear-gradient(180deg,#fff,#fbfbfc)}
+    .tone-mid{background:linear-gradient(180deg,#fff,#f7fbff)}
+    .tone-high{background:linear-gradient(180deg,#fff,#f2f9ff); border-color:rgba(10,132,255,.18)}
+    .heroScore{
+      padding:18px;border-radius:28px;background:linear-gradient(180deg,#fff,#f6fbff);
+      border:1px solid rgba(10,132,255,.16)
+    }
+    .heroScore .big{font-size:56px;font-weight:700;letter-spacing:-.06em;line-height:1}
+    .heroScore .sub{font-size:14px;color:var(--muted);margin-top:10px;line-height:1.45}
+    .shareBox{display:grid;gap:10px;margin-top:14px}
+    .sharePreview{
+      padding:16px;border-radius:22px;background:#fff;border:1px solid var(--line);
+      white-space:pre-line;font-size:16px;line-height:1.5
+    }
     .footerSpace{height:94px}
     .stickyNav{
       position:fixed;left:50%;transform:translateX(-50%);
@@ -122,7 +155,7 @@
       border-radius:28px;padding:10px;display:flex;gap:10px;
       box-shadow:0 14px 34px rgba(0,0,0,.1)
     }
-    .navCard > *{flex:1}
+    .navCard>*{flex:1}
     .modalWrap{position:fixed;inset:0;background:rgba(0,0,0,.34);display:none;align-items:flex-end;justify-content:center;z-index:100}
     .modalWrap.show{display:flex}
     .modal{
@@ -130,12 +163,22 @@
       max-height:86vh;overflow:auto;box-shadow:0 -10px 30px rgba(0,0,0,.18)
     }
     .grab{width:44px;height:5px;border-radius:999px;background:#d2d2d7;margin:2px auto 14px}
-    .modal h3{margin:0 0 8px;font-size:24px;letter-spacing:-.03em}
+    .modal h3{margin:0 0 10px;font-size:24px;letter-spacing:-.03em}
     .modal p{margin:0 0 12px;color:var(--muted);line-height:1.5}
     .muted{color:var(--muted)}
+    .memoryGroup{margin-top:14px}
+    .memoryGroup:first-of-type{margin-top:0}
+    .memoryItem{
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+      padding:12px 0;border-bottom:1px solid rgba(60,60,67,.08)
+    }
+    .memoryItem:last-child{border-bottom:none}
+    .tinyBtn{
+      min-height:32px;padding:0 12px;font-size:14px;border-radius:999px;background:#fff;border:1px solid var(--line)
+    }
+    .empty{color:var(--muted);font-size:15px}
     @media (max-width:720px){
-      .app{padding:0 0 24px}
-      .shell{border-radius:0;min-height:100vh}
+      .shell{border-radius:0}
       .screen,.topbar,.progressWrap{padding-left:12px;padding-right:12px}
       h1{font-size:27px}
       .questionText{font-size:24px}
@@ -143,7 +186,7 @@
       .summaryGrid{grid-template-columns:1fr}
       .stickyNav{width:calc(100vw - 12px);bottom:6px}
       .navCard{padding:8px;border-radius:24px}
-      .navCard > *{min-height:50px}
+      .navCard>*{min-height:50px}
     }
   </style>
 </head>
@@ -151,23 +194,29 @@
   <div class="app">
     <div class="shell">
       <div class="topbar">
-        <div class="topline">
-          <div class="title">Калькулятор выздоровления</div>
-          <div class="stage" id="stageName">Семья</div>
+        <div class="titleRow">
+          <div class="titleWrap">
+            <div class="badge12">12</div>
+            <div class="titleText">Тест 12</div>
+          </div>
+          <div class="stageName" id="stageName">Семья</div>
         </div>
         <div class="tools">
           <button class="ghost small" id="helpBtn">Поддержка</button>
           <button class="ghost small" id="videoBtn">Инструкция</button>
+          <button class="ghost small" id="memoryBtn">Имена</button>
           <button class="danger small" id="restartTop">Сбросить всё</button>
         </div>
       </div>
+
       <div class="progressWrap">
         <div class="progressMeta">
-          <div id="progressLabel">Этап 1</div>
+          <div id="progressLabel">Семья</div>
           <div id="progressStage">1 из 5</div>
         </div>
         <div class="progress"><span id="progressBar"></span></div>
       </div>
+
       <div id="appRoot"></div>
     </div>
   </div>
@@ -176,7 +225,7 @@
     <div class="modal">
       <div class="grab"></div>
       <div id="modalContent"></div>
-      <button class="primary" id="closeModal" style="width:100%;margin-top:8px">Закрыть</button>
+      <button class="primary" id="closeModal" style="width:100%;margin-top:10px">Закрыть</button>
     </div>
   </div>
 
@@ -185,6 +234,12 @@ const SUPPORT_URL = "";
 const VIDEO_URL = "";
 const SUPPORT_TEXT = "Здесь можно разместить ссылку на группу поддержки, чат с куратором или короткую памятку, куда обратиться.";
 const VIDEO_TEXT = "Здесь можно разместить ссылку на видеоинструкцию или короткий текст о том, как правильно проходить тест.";
+
+const STORAGE_KEYS = {
+  family: 't12_saved_family_names_v1',
+  work: 't12_saved_work_names_v1',
+  society: 't12_saved_society_names_v1'
+};
 
 const societyPresets = [
   'Соседи','Курьеры','Кассиры в супермаркете','Люди в очередях','Работники сферы обслуживания',
@@ -260,6 +315,11 @@ function mean(values){
   if (!filtered.length) return 0;
   return Math.round(filtered.reduce((a,b)=>a+b,0)/filtered.length);
 }
+function scoreTone(score){
+  if (score >= 8) return 'tone-high';
+  if (score >= 4) return 'tone-mid';
+  return 'tone-low';
+}
 function mapAnswerToScore(question, answer){
   if (!answer) return 0;
   if (yesNoQuestions.has(question)) return answer === 'Нет' ? 10 : 0;
@@ -279,9 +339,7 @@ function workScore(){ return mean(state.workItems.map(x=>x.score)); }
 function societyScore(){ return mean(Object.values(state.societyScores)); }
 function selfScore(){ return calculateSelfScore(state.selfAnswers); }
 function totalScore(){ return mean([familyScore(), workScore(), societyScore(), selfScore()]); }
-function stageTitle(){
-  return {1:'Семья',2:'Работа / учёба',3:'Общество',4:'Личное выздоровление',5:'Результат'}[state.stage];
-}
+function stageTitle(){ return {1:'Семья',2:'Работа / учёба',3:'Общество',4:'Личное выздоровление',5:'Результат'}[state.stage]; }
 function progressValue(){
   if (state.stage === 1) return 20;
   if (state.stage === 2) return 40;
@@ -294,6 +352,32 @@ function updateProgress(){
   document.getElementById('progressLabel').textContent = stageTitle();
   document.getElementById('progressStage').textContent = `${state.stage} из 5`;
   document.getElementById('progressBar').style.width = progressValue() + '%';
+}
+function safeLoad(key){
+  try{
+    const raw = localStorage.getItem(key);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  }catch(e){ return []; }
+}
+function safeSave(key, value){
+  try{ localStorage.setItem(key, JSON.stringify(value)); }catch(e){}
+}
+function getSavedNames(group){ return safeLoad(STORAGE_KEYS[group]); }
+function rememberName(group, name){
+  const clean = String(name || '').trim();
+  if (!clean) return;
+  const list = getSavedNames(group).filter(x => x !== clean);
+  list.unshift(clean);
+  safeSave(STORAGE_KEYS[group], list.slice(0, 20));
+}
+function removeSavedName(group, name){
+  safeSave(STORAGE_KEYS[group], getSavedNames(group).filter(x => x !== name));
+}
+function clearAllSavedNames(){
+  Object.values(STORAGE_KEYS).forEach(k => {
+    try{ localStorage.removeItem(k); }catch(e){}
+  });
 }
 function restartAll(){
   state.stage=1;
@@ -333,6 +417,7 @@ function addFamily(name, score){
   const n = String(name || '').trim();
   if (!n){ state.error='Сначала введи имя или степень родства.'; render(); return; }
   state.familyItems.push({name:n, score});
+  rememberName('family', n);
   state.familyDraftName='';
   state.error='';
   render();
@@ -342,6 +427,7 @@ function addWork(name, score){
   const n = String(name || '').trim();
   if (!n){ state.error='Сначала введи роль или имя человека.'; render(); return; }
   state.workItems.push({name:n, score});
+  rememberName('work', n);
   state.workDraftName='';
   state.error='';
   render();
@@ -351,9 +437,50 @@ function addCustomSociety(name, score){
   const n = String(name || '').trim();
   if (!n){ state.error='Сначала введи название своей категории.'; render(); return; }
   state.societyScores[n] = score;
+  rememberName('society', n);
   state.customSocietyName='';
   state.error='';
   render();
+}
+function shareText(){
+  return `Мой результат в тесте 12:\n\nВыздоровление в семье: ${familyScore()}\nВыздоровление на работе: ${workScore()}\nВыздоровление в обществе: ${societyScore()}\nЛичное выздоровление: ${selfScore()}\n\nИтого качество твоего выздоровления: ${totalScore()}`;
+}
+async function shareResult(){
+  const text = shareText();
+  try{
+    if (navigator.share){
+      await navigator.share({ title: 'Тест 12', text });
+      return;
+    }
+    await copyResult();
+  }catch(e){}
+}
+async function copyResult(){
+  const text = shareText();
+  try{
+    await navigator.clipboard.writeText(text);
+    openModal('Скопировано', '<p>Текст результата скопирован. Теперь его можно вставить в Telegram или куда угодно.</p>');
+  }catch(e){
+    openModal('Текст результата', `<div class="sharePreview">${esc(text)}</div>`);
+  }
+}
+function openModal(title, bodyHtml){
+  document.getElementById('modalContent').innerHTML = `<h3>${title}</h3>${bodyHtml}`;
+  document.getElementById('modalWrap').classList.add('show');
+}
+function closeModal(){ document.getElementById('modalWrap').classList.remove('show'); }
+
+function suggestionChips(group, currentSetter){
+  const names = getSavedNames(group);
+  if (!names.length) return '';
+  return `
+    <div class="card compact">
+      <div class="sectionTitle">Сохранённые имена</div>
+      <div class="chips">
+        ${names.map(name=>`<button class="chip soft" data-suggest-group="${group}" data-suggest-name="${esc(name)}">${esc(name)}</button>`).join('')}
+      </div>
+    </div>
+  `;
 }
 function scoreGrid(kind, active=null){
   return `<div class="scoreGrid">
@@ -378,15 +505,15 @@ function renderFamily(){
       <h1>Семья</h1>
       <p class="desc">Введи имя или степень родства, затем выбери оценку от 0 до 10.</p>
 
+      ${suggestionChips('family')}
+
       <div class="card">
         <input id="familyName" type="text" placeholder="Например: Мама" value="${esc(state.familyDraftName)}" />
-        <div class="hint">Сначала человек, потом оценка. Так быстрее на телефоне и меньше ошибок.</div>
+        <div class="hint">Имя можно будет запомнить и использовать снова в следующий раз.</div>
         ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
       </div>
 
-      <div class="card">
-        ${scoreGrid('family')}
-      </div>
+      <div class="card">${scoreGrid('family')}</div>
 
       ${state.familyItems.length ? `
       <div class="list">
@@ -409,12 +536,7 @@ function renderWork(){
       <h1>Работа / учёба</h1>
       <p class="desc">Оцени отношения с людьми на работе или в учебном заведении.</p>
 
-      ${state.familyItems.length ? `
-      <div class="card">
-        <div class="chips">
-          ${state.familyItems.map(item=>`<span class="chip on">${esc(item.name)} · ${item.score}</span>`).join('')}
-        </div>
-      </div>` : ''}
+      ${suggestionChips('work')}
 
       <div class="card">
         <input id="workName" type="text" placeholder="Например: Начальник" value="${esc(state.workDraftName)}" />
@@ -422,9 +544,7 @@ function renderWork(){
         ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
       </div>
 
-      <div class="card">
-        ${scoreGrid('work')}
-      </div>
+      <div class="card">${scoreGrid('work')}</div>
 
       ${state.workItems.length ? `
       <div class="list">
@@ -448,20 +568,22 @@ function renderSociety(){
       <h1>Общество</h1>
       <p class="desc">Выбери категорию и сразу поставь оценку. При желании можно добавить свою.</p>
 
-      <div class="card">
+      <div class="card compact">
         <div class="chips">
           ${societyPresets.map(name=>`<button class="chip ${state.societySelected===name?'on':''}" data-preset="${esc(name)}">${esc(name)}</button>`).join('')}
         </div>
       </div>
 
       <div class="card">
-        <div style="font-weight:700;font-size:20px;margin-bottom:8px">${esc(state.societySelected)}</div>
-        <div class="hint" style="margin:0 0 12px">Можно выбрать оценку или пропустить.</div>
+        <div class="sectionTitle">${esc(state.societySelected)}</div>
+        <div class="hint" style="margin-top:0;margin-bottom:12px">Можно выбрать оценку или пропустить.</div>
         <div class="tools" style="margin:0 0 12px">
           <button class="secondary small" id="skipSocietyBtn">Пропустить</button>
         </div>
         ${scoreGrid('society', selectedScore)}
       </div>
+
+      ${suggestionChips('society')}
 
       <div class="card">
         <input id="customSocietyName" type="text" placeholder="Своя категория, например: Дворник" value="${esc(state.customSocietyName)}" />
@@ -504,48 +626,38 @@ function renderSelf(){
         <div style="font-size:24px;font-weight:700">Все вопросы заполнены</div>
       </div>`}
 
-      ${Object.keys(state.selfAnswers).length ? `
-      <div class="card">
-        <div class="chips">
-          ${Object.entries(state.selfAnswers).map(([k,v])=>`<span class="chip on">${esc(v)}</span>`).join('')}
-        </div>
-      </div>` : ''}
-
       ${nav('Завершить этап')}
     </div>
   `;
 }
 function renderResult(){
+  const text = shareText();
   return `
     <div class="screen">
       <div class="eyebrow">Этап 5</div>
       <h1>Результат</h1>
-      <p class="desc">Только текущий срез на сегодня, без сохранения истории.</p>
+      <p class="desc">Только текущий срез на сегодня. При желании результат можно сразу отправить или скопировать.</p>
 
-      <div class="summaryGrid">
-        <div class="summaryCard"><div class="k">Семья</div><div class="v">${familyScore()}</div></div>
-        <div class="summaryCard"><div class="k">Работа / учёба</div><div class="v">${workScore()}</div></div>
-        <div class="summaryCard"><div class="k">Общество</div><div class="v">${societyScore()}</div></div>
-        <div class="summaryCard"><div class="k">Личное</div><div class="v">${selfScore()}</div></div>
+      <div class="heroScore">
+        <div class="stageName">Итоговый уровень</div>
+        <div class="big">${totalScore()}</div>
+        <div class="sub">Результат выглядит спокойно и нейтрально: без красных оценок и без давления.</div>
       </div>
 
-      <div class="card" style="margin-top:14px">
-        <div class="stage">Итоговый уровень</div>
-        <div style="font-size:48px;font-weight:700;letter-spacing:-.05em;margin-top:4px">${totalScore()}</div>
+      <div class="summaryGrid" style="margin-top:14px">
+        <div class="summaryCard ${scoreTone(familyScore())}"><div class="k">Семья</div><div class="v">${familyScore()}</div></div>
+        <div class="summaryCard ${scoreTone(workScore())}"><div class="k">Работа / учёба</div><div class="v">${workScore()}</div></div>
+        <div class="summaryCard ${scoreTone(societyScore())}"><div class="k">Общество</div><div class="v">${societyScore()}</div></div>
+        <div class="summaryCard ${scoreTone(selfScore())}"><div class="k">Личное</div><div class="v">${selfScore()}</div></div>
       </div>
 
-      <div class="tools">
-        <button class="primary" id="restartResultBtn">Пройти заново</button>
+      <div class="shareBox">
+        <button class="primary" id="shareBtn">Поделиться результатом</button>
+        <button class="secondary" id="copyBtn">Скопировать текст</button>
+        <div class="sharePreview">${esc(text)}</div>
       </div>
     </div>
   `;
-}
-function openModal(title, bodyHtml){
-  document.getElementById('modalContent').innerHTML = `<h3>${title}</h3>${bodyHtml}`;
-  document.getElementById('modalWrap').classList.add('show');
-}
-function closeModal(){
-  document.getElementById('modalWrap').classList.remove('show');
 }
 function bindTopActions(){
   document.getElementById('restartTop').onclick = restartAll;
@@ -558,13 +670,67 @@ function bindTopActions(){
       : `<p>${SUPPORT_TEXT}</p><p class="muted">Чтобы вставить живую ссылку, открой файл в редакторе и заполни переменную SUPPORT_URL в начале скрипта.</p>`;
     openModal('Поддержка', body);
   };
+
   document.getElementById('videoBtn').onclick = ()=>{
     const body = VIDEO_URL
       ? `<p>Ниже можно открыть инструкцию.</p><a class="btn primary" style="width:100%" href="${VIDEO_URL}" target="_blank" rel="noopener">Открыть инструкцию</a>`
       : `<p>${VIDEO_TEXT}</p><p class="muted">Чтобы вставить живую ссылку, открой файл в редакторе и заполни переменную VIDEO_URL в начале скрипта.</p>`;
     openModal('Инструкция', body);
   };
-};
+
+  document.getElementById('memoryBtn').onclick = ()=>{
+    const family = getSavedNames('family');
+    const work = getSavedNames('work');
+    const society = getSavedNames('society');
+
+    function block(title, group, items){
+      return `
+        <div class="memoryGroup">
+          <div class="sectionTitle">${title}</div>
+          ${items.length ? items.map(name=>`
+            <div class="memoryItem">
+              <div>${esc(name)}</div>
+              <button class="tinyBtn" data-remove-memory="${group}" data-remove-name="${esc(name)}">Удалить</button>
+            </div>
+          `).join('') : `<div class="empty">Пока пусто</div>`}
+        </div>
+      `;
+    }
+
+    const body = `
+      <p>Здесь хранятся подсказки имён и категорий для следующих прохождений.</p>
+      ${block('Семья', 'family', family)}
+      ${block('Работа / учёба', 'work', work)}
+      ${block('Свои категории', 'society', society)}
+      <button class="danger" id="clearAllMemoryBtn" style="width:100%;margin-top:16px">Удалить все имена из памяти</button>
+    `;
+    openModal('Имена', body);
+
+    document.querySelectorAll('[data-remove-memory]').forEach(btn => {
+      btn.onclick = ()=>{
+        removeSavedName(btn.dataset.removeMemory, btn.dataset.removeName);
+        document.getElementById('memoryBtn').click();
+      };
+    });
+    document.getElementById('clearAllMemoryBtn').onclick = ()=>{
+      clearAllSavedNames();
+      closeModal();
+      openModal('Имена очищены', '<p>Все сохранённые имена и свои категории удалены из памяти устройства.</p>');
+      render();
+    };
+  };
+}
+function bindSuggestions(){
+  document.querySelectorAll('[data-suggest-group]').forEach(btn => {
+    btn.onclick = ()=>{
+      const group = btn.dataset.suggestGroup;
+      const name = btn.dataset.suggestName;
+      if (group === 'family'){ state.familyDraftName = name; render(); }
+      if (group === 'work'){ state.workDraftName = name; render(); }
+      if (group === 'society'){ state.customSocietyName = name; render(); }
+    };
+  });
+}
 function render(){
   updateProgress();
   const root = document.getElementById('appRoot');
@@ -576,6 +742,7 @@ function render(){
   if (state.stage === 5) root.innerHTML = renderResult();
 
   bindTopActions();
+  bindSuggestions();
 
   if (state.stage === 1){
     const input = document.getElementById('familyName');
@@ -616,7 +783,8 @@ function render(){
   }
 
   if (state.stage === 5){
-    document.getElementById('restartResultBtn').onclick = restartAll;
+    document.getElementById('shareBtn').onclick = shareResult;
+    document.getElementById('copyBtn').onclick = copyResult;
   }
 }
 render();
