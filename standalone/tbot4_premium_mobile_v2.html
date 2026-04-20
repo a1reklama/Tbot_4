@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Калькулятор выздоровления</title>
+  <style>
+    :root{
+      --bg:#f5f5f7;
+      --card:rgba(255,255,255,.84);
+      --solid:#fff;
+      --text:#1d1d1f;
+      --muted:#6e6e73;
+      --line:rgba(60,60,67,.18);
+      --accent:#0a84ff;
+      --accent-dark:#0071e3;
+      --danger:#c9342f;
+      --shadow:0 18px 40px rgba(0,0,0,.08);
+      --r-xl:28px;
+      --r-lg:22px;
+      --tap:54px;
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0}
+    body{
+      min-height:100vh;color:var(--text);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
+      background:radial-gradient(1200px 700px at 0% -10%, #ffffff 0, #f5f5f7 45%, #edf1f5 100%);
+    }
+    .app{max-width:860px;margin:0 auto;padding:10px 10px 28px}
+    .shell{
+      background:var(--card);
+      backdrop-filter:saturate(180%) blur(20px);
+      border:1px solid rgba(255,255,255,.72);
+      border-radius:34px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .topbar{
+      padding:14px 14px 10px;
+      border-bottom:1px solid rgba(60,60,67,.08);
+      background:rgba(255,255,255,.55);
+    }
+    .topline{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .title{font-size:20px;font-weight:700;letter-spacing:-.02em}
+    .stage{font-size:13px;color:var(--muted)}
+    .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    button,a.btn{
+      appearance:none;border:none;cursor:pointer;text-decoration:none;
+      min-height:var(--tap);border-radius:999px;padding:0 18px;
+      font-size:17px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;
+      transition:transform .06s ease, background .16s ease, border-color .16s ease, opacity .16s ease,color .16s ease
+    }
+    button:active,a.btn:active{transform:scale(.985)}
+    .primary{background:var(--accent);color:#fff}
+    .primary:hover{background:var(--accent-dark)}
+    .secondary{background:rgba(60,60,67,.08);color:var(--text)}
+    .ghost{background:#fff;border:1px solid var(--line);color:var(--text)}
+    .danger{background:#fff;border:1px solid rgba(201,52,47,.22);color:var(--danger)}
+    .small{min-height:40px;padding:0 14px;font-size:15px}
+    .progressWrap{padding:12px 14px 0}
+    .progressMeta{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted);margin-bottom:8px}
+    .progress{height:8px;background:rgba(60,60,67,.08);border-radius:999px;overflow:hidden}
+    .progress > span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#61b0ff);transition:width .25s ease}
+    .screen{padding:18px 14px 12px}
+    .eyebrow{font-size:13px;color:var(--muted);margin-bottom:8px}
+    h1{font-size:30px;line-height:1.08;letter-spacing:-.03em;margin:0 0 10px}
+    .desc{font-size:16px;line-height:1.5;color:var(--muted);margin:0 0 16px}
+    .card{
+      background:var(--solid);
+      border:1px solid rgba(60,60,67,.1);
+      border-radius:var(--r-xl);
+      padding:18px;
+      box-shadow:0 8px 24px rgba(17,17,17,.04);
+      margin-bottom:14px;
+    }
+    .soft{
+      background:linear-gradient(180deg,#fff,#fafafc);
+      border:1px solid rgba(60,60,67,.1);
+      border-radius:24px;
+      padding:14px;
+    }
+    input[type=text]{
+      width:100%;min-height:58px;border-radius:18px;border:1px solid var(--line);
+      padding:0 16px;font-size:19px;outline:none;background:#fff;color:var(--text)
+    }
+    input[type=text]:focus{border-color:rgba(10,132,255,.45);box-shadow:0 0 0 4px rgba(10,132,255,.12)}
+    .hint{margin-top:10px;font-size:14px;color:var(--muted);line-height:1.45}
+    .error{margin-top:12px;padding:14px 16px;border-radius:18px;background:#fff5f4;border:1px solid rgba(201,52,47,.16);color:var(--danger);font-size:14px}
+    .grid{display:grid;gap:10px}
+    .scoreGrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+    .scoreBtn{min-height:58px;border-radius:18px;background:#fff;border:1px solid var(--line);font-size:20px;font-weight:700}
+    .scoreBtn.active{background:#111;color:#fff;border-color:#111}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{min-height:38px;padding:0 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:15px;font-weight:600}
+    .chip.on{background:#111;color:#fff;border-color:#111}
+    .list{display:grid;gap:10px}
+    .row{
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+      padding:14px 16px;border-radius:20px;background:#fff;border:1px solid var(--line)
+    }
+    .row .name{font-weight:600}
+    .row .meta{font-size:13px;color:var(--muted);margin-top:3px}
+    .row strong{font-size:18px}
+    .questionNo{font-size:13px;color:var(--muted);margin-bottom:10px}
+    .questionText{font-size:28px;line-height:1.14;letter-spacing:-.03em;font-weight:700}
+    .answers{display:grid;gap:10px;margin-top:16px}
+    .answers button{width:100%;background:#fff;border:1px solid var(--line);color:var(--text)}
+    .summaryGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .summaryCard{padding:16px;border-radius:24px;background:#fff;border:1px solid var(--line)}
+    .summaryCard .k{font-size:14px;color:var(--muted);margin-bottom:8px}
+    .summaryCard .v{font-size:34px;font-weight:700;letter-spacing:-.04em}
+    .footerSpace{height:94px}
+    .stickyNav{
+      position:fixed;left:50%;transform:translateX(-50%);
+      bottom:12px;width:min(840px, calc(100vw - 20px));z-index:30;
+    }
+    .navCard{
+      background:rgba(255,255,255,.9);
+      backdrop-filter:saturate(180%) blur(22px);
+      border:1px solid rgba(60,60,67,.12);
+      border-radius:28px;padding:10px;display:flex;gap:10px;
+      box-shadow:0 14px 34px rgba(0,0,0,.1)
+    }
+    .navCard > *{flex:1}
+    .modalWrap{position:fixed;inset:0;background:rgba(0,0,0,.34);display:none;align-items:flex-end;justify-content:center;z-index:100}
+    .modalWrap.show{display:flex}
+    .modal{
+      width:min(760px,100%);background:#fff;border-radius:30px 30px 0 0;padding:18px 16px 22px;
+      max-height:86vh;overflow:auto;box-shadow:0 -10px 30px rgba(0,0,0,.18)
+    }
+    .grab{width:44px;height:5px;border-radius:999px;background:#d2d2d7;margin:2px auto 14px}
+    .modal h3{margin:0 0 8px;font-size:24px;letter-spacing:-.03em}
+    .modal p{margin:0 0 12px;color:var(--muted);line-height:1.5}
+    .muted{color:var(--muted)}
+    @media (max-width:720px){
+      .app{padding:0 0 24px}
+      .shell{border-radius:0;min-height:100vh}
+      .screen,.topbar,.progressWrap{padding-left:12px;padding-right:12px}
+      h1{font-size:27px}
+      .questionText{font-size:24px}
+      .scoreGrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+      .summaryGrid{grid-template-columns:1fr}
+      .stickyNav{width:calc(100vw - 12px);bottom:6px}
+      .navCard{padding:8px;border-radius:24px}
+      .navCard > *{min-height:50px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="shell">
+      <div class="topbar">
+        <div class="topline">
+          <div class="title">Калькулятор выздоровления</div>
+          <div class="stage" id="stageName">Семья</div>
+        </div>
+        <div class="tools">
+          <button class="ghost small" id="helpBtn">Поддержка</button>
+          <button class="ghost small" id="videoBtn">Инструкция</button>
+          <button class="danger small" id="restartTop">Сбросить всё</button>
+        </div>
+      </div>
+      <div class="progressWrap">
+        <div class="progressMeta">
+          <div id="progressLabel">Этап 1</div>
+          <div id="progressStage">1 из 5</div>
+        </div>
+        <div class="progress"><span id="progressBar"></span></div>
+      </div>
+      <div id="appRoot"></div>
+    </div>
+  </div>
+
+  <div class="modalWrap" id="modalWrap">
+    <div class="modal">
+      <div class="grab"></div>
+      <div id="modalContent"></div>
+      <button class="primary" id="closeModal" style="width:100%;margin-top:8px">Закрыть</button>
+    </div>
+  </div>
+
+<script>
+const SUPPORT_URL = "";
+const VIDEO_URL = "";
+const SUPPORT_TEXT = "Здесь можно разместить ссылку на группу поддержки, чат с куратором или короткую памятку, куда обратиться.";
+const VIDEO_TEXT = "Здесь можно разместить ссылку на видеоинструкцию или короткий текст о том, как правильно проходить тест.";
+
+const societyPresets = [
+  'Соседи','Курьеры','Кассиры в супермаркете','Люди в очередях','Работники сферы обслуживания',
+  'Сотрудники банка','Прохожие на улице','Люди в транспорте','Водители соседних машин',
+  'Полиция','Чиновники','Врачи','Таксисты','Продавцы','Официанты','Охранники'
+];
+const selfQuestions = [
+  'Когда мне плохо, обращаюсь ли я сразу к врачу?',
+  'Ем ли я здоровую еду?',
+  'Поддерживаю ли я режим регулярного питания?',
+  'Соблюдаю ли я личную гигиену, чищу ли я зубы утром и вечером?',
+  'Активен ли я физически, насколько часто я занимаюсь спортом или делаю зарядку?',
+  'Есть ли у меня хобби, какие-то увлечения помимо работы?',
+  'Есть ли у меня друзья, провожу ли я с ними время?',
+  'Верю ли я, что существует что-то невидимое и доброе, что помогает мне каждый день?',
+  'Обращаюсь ли я ежедневно к Богу, или к какой-то высшей силе?',
+  'Употребляю ли я наркотики?',
+  'Напиваюсь ли я регулярно?',
+  'Играю ли я в азартные игры?',
+  'Делаю ли я ставки?',
+  'Изменяю ли я любимому человеку?',
+  'Применяю ли я насилие над кем-либо — эмоциональное или физическое?',
+  'Присваиваю ли я чужие деньги?',
+  'Торчу ли я на интернет порно?',
+  'Трачу ли я больше часа в день на чтение новостей?',
+  'Залипаю ли я в социальных сетях или в мессенджерах?',
+  'Курю ли я?',
+  'Пью ли я без меры кофе или энергетики?',
+  'Страдаю ли я от трудоголизма?',
+  'Страдаю ли я от беспорядочного секса?',
+  'Беру ли я в долг?',
+  'Вёлся ли я словами или действиями на какую-то другую одержимость?'
+];
+const yesNoQuestions = new Set([
+  'Употребляю ли я наркотики?','Напиваюсь ли я регулярно?','Играю ли я в азартные игры?','Делаю ли я ставки?',
+  'Изменяю ли я любимому человеку?','Применяю ли я насилие над кем-либо — эмоциональное или физическое?',
+  'Присваиваю ли я чужие деньги?','Торчу ли я на интернет порно?','Трачу ли я больше часа в день на чтение новостей?',
+  'Залипаю ли я в социальных сетях или в мессенджерах?','Курю ли я?','Пью ли я без меры кофе или энергетики?',
+  'Страдаю ли я от трудоголизма?','Страдаю ли я от беспорядочного секса?','Беру ли я в долг?',
+  'Вёлся ли я словами или действиями на какую-то другую одержимость?'
+]);
+const hardZeroQuestions = new Set(['Употребляю ли я наркотики?','Напиваюсь ли я регулярно?']);
+const capAtThreeQuestions = new Set(['Курю ли я?','Вёлся ли я словами или действиями на какую-то другую одержимость?']);
+const obsessionQuestions = [
+  'Употребляю ли я наркотики?','Напиваюсь ли я регулярно?','Играю ли я в азартные игры?','Делаю ли я ставки?',
+  'Изменяю ли я любимому человеку?','Применяю ли я насилие над кем-либо — эмоциональное или физическое?',
+  'Присваиваю ли я чужие деньги?','Торчу ли я на интернет порно?','Трачу ли я больше часа в день на чтение новостей?',
+  'Залипаю ли я в социальных сетях или в мессенджерах?','Курю ли я?','Пью ли я без меры кофе или энергетики?',
+  'Страдаю ли я от трудоголизма?','Страдаю ли я от беспорядочного секса?','Беру ли я в долг?',
+  'Вёлся ли я словами или действиями на какую-то другую одержимость?'
+];
+const freqOptions = ['Никогда','Редко','Иногда','Часто','Всегда'];
+const ynOptions = ['Да','Нет'];
+
+const state = {
+  stage:1,
+  familyItems:[],
+  workItems:[],
+  familyDraftName:'',
+  workDraftName:'',
+  societySelected:societyPresets[0],
+  societyScores:{},
+  customSocietyName:'',
+  selfAnswers:{},
+  error:''
+};
+
+function esc(s){
+  return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
+}
+function mean(values){
+  const filtered = values.filter(v => typeof v === 'number' && Number.isFinite(v) && v >= 0);
+  if (!filtered.length) return 0;
+  return Math.round(filtered.reduce((a,b)=>a+b,0)/filtered.length);
+}
+function mapAnswerToScore(question, answer){
+  if (!answer) return 0;
+  if (yesNoQuestions.has(question)) return answer === 'Нет' ? 10 : 0;
+  const m = {'Никогда':0,'Редко':3,'Иногда':5,'Часто':8,'Всегда':10};
+  return m[answer] ?? 0;
+}
+function calculateSelfScore(selfAnswers){
+  const baseAverage = mean(Object.entries(selfAnswers).map(([q,a])=>mapAnswerToScore(q,a)));
+  if ([...hardZeroQuestions].some(q => selfAnswers[q] === 'Да')) return 0;
+  const obsessionCount = obsessionQuestions.filter(q => selfAnswers[q] === 'Да').length;
+  if (obsessionCount >= 4) return 0;
+  if ([...capAtThreeQuestions].some(q => selfAnswers[q] === 'Да')) return Math.min(baseAverage, 3);
+  return baseAverage;
+}
+function familyScore(){ return mean(state.familyItems.map(x=>x.score)); }
+function workScore(){ return mean(state.workItems.map(x=>x.score)); }
+function societyScore(){ return mean(Object.values(state.societyScores)); }
+function selfScore(){ return calculateSelfScore(state.selfAnswers); }
+function totalScore(){ return mean([familyScore(), workScore(), societyScore(), selfScore()]); }
+function stageTitle(){
+  return {1:'Семья',2:'Работа / учёба',3:'Общество',4:'Личное выздоровление',5:'Результат'}[state.stage];
+}
+function progressValue(){
+  if (state.stage === 1) return 20;
+  if (state.stage === 2) return 40;
+  if (state.stage === 3) return 60;
+  if (state.stage === 4) return 80 + Math.round((Object.keys(state.selfAnswers).length / selfQuestions.length) * 20);
+  return 100;
+}
+function updateProgress(){
+  document.getElementById('stageName').textContent = stageTitle();
+  document.getElementById('progressLabel').textContent = stageTitle();
+  document.getElementById('progressStage').textContent = `${state.stage} из 5`;
+  document.getElementById('progressBar').style.width = progressValue() + '%';
+}
+function restartAll(){
+  state.stage=1;
+  state.familyItems=[];
+  state.workItems=[];
+  state.familyDraftName='';
+  state.workDraftName='';
+  state.societySelected=societyPresets[0];
+  state.societyScores={};
+  state.customSocietyName='';
+  state.selfAnswers={};
+  state.error='';
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function resetCurrentStage(){
+  state.error='';
+  if (state.stage === 1){ state.familyItems=[]; state.familyDraftName=''; }
+  if (state.stage === 2){ state.workItems=[]; state.workDraftName=''; }
+  if (state.stage === 3){ state.societyScores={}; state.customSocietyName=''; state.societySelected=societyPresets[0]; }
+  if (state.stage === 4){ state.selfAnswers={}; }
+  render();
+}
+function nextStage(){
+  state.error='';
+  state.stage = Math.min(5, state.stage + 1);
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function currentQuestionInfo(){
+  const idx = selfQuestions.findIndex(q => !state.selfAnswers[q]);
+  if (idx === -1) return { index:-1, q:null, options:[] };
+  const q = selfQuestions[idx];
+  return { index:idx, q, options: yesNoQuestions.has(q) ? ynOptions : freqOptions };
+}
+function addFamily(name, score){
+  const n = String(name || '').trim();
+  if (!n){ state.error='Сначала введи имя или степень родства.'; render(); return; }
+  state.familyItems.push({name:n, score});
+  state.familyDraftName='';
+  state.error='';
+  render();
+  const i = document.getElementById('familyName'); if (i) i.focus();
+}
+function addWork(name, score){
+  const n = String(name || '').trim();
+  if (!n){ state.error='Сначала введи роль или имя человека.'; render(); return; }
+  state.workItems.push({name:n, score});
+  state.workDraftName='';
+  state.error='';
+  render();
+  const i = document.getElementById('workName'); if (i) i.focus();
+}
+function addCustomSociety(name, score){
+  const n = String(name || '').trim();
+  if (!n){ state.error='Сначала введи название своей категории.'; render(); return; }
+  state.societyScores[n] = score;
+  state.customSocietyName='';
+  state.error='';
+  render();
+}
+function scoreGrid(kind, active=null){
+  return `<div class="scoreGrid">
+    ${Array.from({length:11},(_,i)=>`<button class="scoreBtn ${active===i?'active':''}" data-${kind}-score="${i}">${i}</button>`).join('')}
+  </div>`;
+}
+function nav(primaryText='Завершить этап'){
+  return `
+    <div class="footerSpace"></div>
+    <div class="stickyNav">
+      <div class="navCard">
+        <button class="secondary" id="clearStageBtn">Очистить этап</button>
+        <button class="primary" id="nextBtn">${primaryText}</button>
+      </div>
+    </div>
+  `;
+}
+function renderFamily(){
+  return `
+    <div class="screen">
+      <div class="eyebrow">Этап 1</div>
+      <h1>Семья</h1>
+      <p class="desc">Введи имя или степень родства, затем выбери оценку от 0 до 10.</p>
+
+      <div class="card">
+        <input id="familyName" type="text" placeholder="Например: Мама" value="${esc(state.familyDraftName)}" />
+        <div class="hint">Сначала человек, потом оценка. Так быстрее на телефоне и меньше ошибок.</div>
+        ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
+      </div>
+
+      <div class="card">
+        ${scoreGrid('family')}
+      </div>
+
+      ${state.familyItems.length ? `
+      <div class="list">
+        ${state.familyItems.map(item=>`
+          <div class="row">
+            <div><div class="name">${esc(item.name)}</div><div class="meta">Семья</div></div>
+            <strong>${item.score}</strong>
+          </div>
+        `).join('')}
+      </div>` : ''}
+
+      ${nav('Завершить этап')}
+    </div>
+  `;
+}
+function renderWork(){
+  return `
+    <div class="screen">
+      <div class="eyebrow">Этап 2</div>
+      <h1>Работа / учёба</h1>
+      <p class="desc">Оцени отношения с людьми на работе или в учебном заведении.</p>
+
+      ${state.familyItems.length ? `
+      <div class="card">
+        <div class="chips">
+          ${state.familyItems.map(item=>`<span class="chip on">${esc(item.name)} · ${item.score}</span>`).join('')}
+        </div>
+      </div>` : ''}
+
+      <div class="card">
+        <input id="workName" type="text" placeholder="Например: Начальник" value="${esc(state.workDraftName)}" />
+        <div class="hint">Можно писать роль, имя или короткое описание.</div>
+        ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
+      </div>
+
+      <div class="card">
+        ${scoreGrid('work')}
+      </div>
+
+      ${state.workItems.length ? `
+      <div class="list">
+        ${state.workItems.map(item=>`
+          <div class="row">
+            <div><div class="name">${esc(item.name)}</div><div class="meta">Работа / учёба</div></div>
+            <strong>${item.score}</strong>
+          </div>
+        `).join('')}
+      </div>` : ''}
+
+      ${nav('Завершить этап')}
+    </div>
+  `;
+}
+function renderSociety(){
+  const selectedScore = Object.prototype.hasOwnProperty.call(state.societyScores, state.societySelected) ? state.societyScores[state.societySelected] : null;
+  return `
+    <div class="screen">
+      <div class="eyebrow">Этап 3</div>
+      <h1>Общество</h1>
+      <p class="desc">Выбери категорию и сразу поставь оценку. При желании можно добавить свою.</p>
+
+      <div class="card">
+        <div class="chips">
+          ${societyPresets.map(name=>`<button class="chip ${state.societySelected===name?'on':''}" data-preset="${esc(name)}">${esc(name)}</button>`).join('')}
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="font-weight:700;font-size:20px;margin-bottom:8px">${esc(state.societySelected)}</div>
+        <div class="hint" style="margin:0 0 12px">Можно выбрать оценку или пропустить.</div>
+        <div class="tools" style="margin:0 0 12px">
+          <button class="secondary small" id="skipSocietyBtn">Пропустить</button>
+        </div>
+        ${scoreGrid('society', selectedScore)}
+      </div>
+
+      <div class="card">
+        <input id="customSocietyName" type="text" placeholder="Своя категория, например: Дворник" value="${esc(state.customSocietyName)}" />
+        <div class="hint">Если стандартной категории нет, введи свою и выбери оценку ниже.</div>
+        ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
+        <div style="margin-top:12px">${scoreGrid('custom')}</div>
+      </div>
+
+      ${Object.keys(state.societyScores).length ? `
+      <div class="list">
+        ${Object.entries(state.societyScores).map(([k,v])=>`
+          <div class="row">
+            <div><div class="name">${esc(k)}</div><div class="meta">Общество</div></div>
+            <strong>${v === -1 ? '—' : v}</strong>
+          </div>
+        `).join('')}
+      </div>` : ''}
+
+      ${nav('Завершить этап')}
+    </div>
+  `;
+}
+function renderSelf(){
+  const q = currentQuestionInfo();
+  return `
+    <div class="screen">
+      <div class="eyebrow">Этап 4</div>
+      <h1>Личное выздоровление</h1>
+      <p class="desc">Отвечай на один вопрос за раз. Интерфейс не мешает, вся логика расчёта сохранена.</p>
+
+      ${q.q ? `
+      <div class="card">
+        <div class="questionNo">Вопрос ${q.index + 1} из ${selfQuestions.length}</div>
+        <div class="questionText">${esc(q.q)}</div>
+        <div class="answers">
+          ${q.options.map(opt=>`<button data-answer="${esc(opt)}">${esc(opt)}</button>`).join('')}
+        </div>
+      </div>` : `
+      <div class="card">
+        <div style="font-size:24px;font-weight:700">Все вопросы заполнены</div>
+      </div>`}
+
+      ${Object.keys(state.selfAnswers).length ? `
+      <div class="card">
+        <div class="chips">
+          ${Object.entries(state.selfAnswers).map(([k,v])=>`<span class="chip on">${esc(v)}</span>`).join('')}
+        </div>
+      </div>` : ''}
+
+      ${nav('Завершить этап')}
+    </div>
+  `;
+}
+function renderResult(){
+  return `
+    <div class="screen">
+      <div class="eyebrow">Этап 5</div>
+      <h1>Результат</h1>
+      <p class="desc">Только текущий срез на сегодня, без сохранения истории.</p>
+
+      <div class="summaryGrid">
+        <div class="summaryCard"><div class="k">Семья</div><div class="v">${familyScore()}</div></div>
+        <div class="summaryCard"><div class="k">Работа / учёба</div><div class="v">${workScore()}</div></div>
+        <div class="summaryCard"><div class="k">Общество</div><div class="v">${societyScore()}</div></div>
+        <div class="summaryCard"><div class="k">Личное</div><div class="v">${selfScore()}</div></div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <div class="stage">Итоговый уровень</div>
+        <div style="font-size:48px;font-weight:700;letter-spacing:-.05em;margin-top:4px">${totalScore()}</div>
+      </div>
+
+      <div class="tools">
+        <button class="primary" id="restartResultBtn">Пройти заново</button>
+      </div>
+    </div>
+  `;
+}
+function openModal(title, bodyHtml){
+  document.getElementById('modalContent').innerHTML = `<h3>${title}</h3>${bodyHtml}`;
+  document.getElementById('modalWrap').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('modalWrap').classList.remove('show');
+}
+function bindTopActions(){
+  document.getElementById('restartTop').onclick = restartAll;
+  document.getElementById('closeModal').onclick = closeModal;
+  document.getElementById('modalWrap').onclick = (e)=>{ if (e.target.id === 'modalWrap') closeModal(); };
+
+  document.getElementById('helpBtn').onclick = ()=>{
+    const body = SUPPORT_URL
+      ? `<p>Ниже можно перейти за поддержкой.</p><a class="btn primary" style="width:100%" href="${SUPPORT_URL}" target="_blank" rel="noopener">Открыть поддержку</a>`
+      : `<p>${SUPPORT_TEXT}</p><p class="muted">Чтобы вставить живую ссылку, открой файл в редакторе и заполни переменную SUPPORT_URL в начале скрипта.</p>`;
+    openModal('Поддержка', body);
+  };
+  document.getElementById('videoBtn').onclick = ()=>{
+    const body = VIDEO_URL
+      ? `<p>Ниже можно открыть инструкцию.</p><a class="btn primary" style="width:100%" href="${VIDEO_URL}" target="_blank" rel="noopener">Открыть инструкцию</a>`
+      : `<p>${VIDEO_TEXT}</p><p class="muted">Чтобы вставить живую ссылку, открой файл в редакторе и заполни переменную VIDEO_URL в начале скрипта.</p>`;
+    openModal('Инструкция', body);
+  };
+};
+function render(){
+  updateProgress();
+  const root = document.getElementById('appRoot');
+
+  if (state.stage === 1) root.innerHTML = renderFamily();
+  if (state.stage === 2) root.innerHTML = renderWork();
+  if (state.stage === 3) root.innerHTML = renderSociety();
+  if (state.stage === 4) root.innerHTML = renderSelf();
+  if (state.stage === 5) root.innerHTML = renderResult();
+
+  bindTopActions();
+
+  if (state.stage === 1){
+    const input = document.getElementById('familyName');
+    input.focus();
+    input.oninput = e => state.familyDraftName = e.target.value;
+    document.querySelectorAll('[data-family-score]').forEach(btn => btn.onclick = ()=>addFamily(state.familyDraftName, Number(btn.dataset.familyScore)));
+    document.getElementById('clearStageBtn').onclick = resetCurrentStage;
+    document.getElementById('nextBtn').onclick = nextStage;
+  }
+
+  if (state.stage === 2){
+    const input = document.getElementById('workName');
+    input.focus();
+    input.oninput = e => state.workDraftName = e.target.value;
+    document.querySelectorAll('[data-work-score]').forEach(btn => btn.onclick = ()=>addWork(state.workDraftName, Number(btn.dataset.workScore)));
+    document.getElementById('clearStageBtn').onclick = resetCurrentStage;
+    document.getElementById('nextBtn').onclick = nextStage;
+  }
+
+  if (state.stage === 3){
+    document.querySelectorAll('[data-preset]').forEach(btn => btn.onclick = ()=>{ state.societySelected = btn.dataset.preset; state.error=''; render(); });
+    document.querySelectorAll('[data-society-score]').forEach(btn => btn.onclick = ()=>{ state.societyScores[state.societySelected] = Number(btn.dataset.societyScore); state.error=''; render(); });
+    document.querySelectorAll('[data-custom-score]').forEach(btn => btn.onclick = ()=>addCustomSociety(state.customSocietyName, Number(btn.dataset.customScore)));
+    document.getElementById('skipSocietyBtn').onclick = ()=>{ state.societyScores[state.societySelected] = -1; state.error=''; render(); };
+    const input = document.getElementById('customSocietyName');
+    input.oninput = e => state.customSocietyName = e.target.value;
+    document.getElementById('clearStageBtn').onclick = resetCurrentStage;
+    document.getElementById('nextBtn').onclick = nextStage;
+  }
+
+  if (state.stage === 4){
+    document.querySelectorAll('[data-answer]').forEach(btn => btn.onclick = ()=>{
+      const q = currentQuestionInfo().q;
+      if (q){ state.selfAnswers[q] = btn.dataset.answer; state.error=''; render(); }
+    });
+    document.getElementById('clearStageBtn').onclick = resetCurrentStage;
+    document.getElementById('nextBtn').onclick = nextStage;
+  }
+
+  if (state.stage === 5){
+    document.getElementById('restartResultBtn').onclick = restartAll;
+  }
+}
+render();
+</script>
+</body>
+</html>
