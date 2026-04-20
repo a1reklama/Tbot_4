@@ -1,0 +1,15 @@
+body{margin:0;background:#f3f4f6;font-family:Arial}
+.container{max-width:900px;margin:auto}
+.card{background:#fff;padding:20px;border-radius:16px;margin-top:16px}
+.button-row{display:flex;gap:10px;margin-top:10px}
+.primary-btn{background:#111;color:#fff;padding:10px 16px;border-radius:10px;border:none}
+.secondary-btn{background:#eee;padding:10px 16px;border-radius:10px;border:none}
+.entry-row{display:flex;gap:10px}
+input{flex:1;padding:10px;border-radius:10px;border:1px solid #ddd}
+.list-item{display:flex;justify-content:space-between;background:#f9f9f9;padding:8px;border-radius:8px;margin-top:4px}
+.progress-bar{height:6px;background:#ddd;border-radius:4px;overflow:hidden}
+.progress-bar span{display:block;height:100%;background:#111}
+.preset{padding:10px;border:1px solid #ddd;border-radius:10px}
+.preset.active{background:#111;color:#fff}
+.chip{padding:6px 10px;border:1px solid #ccc;border-radius:6px}
+.chip.active{background:#111;color:#fff}
