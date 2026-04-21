@@ -392,7 +392,7 @@ function addCustomSociety(name, score){
 }
 
 function shareText(){
-  return `Качество моего выздоровления:\n\nВыздоровление в семье: ${familyScore()}\nВыздоровление на работе: ${workScore()}\nВыздоровление в обществе: ${societyScore()}\nЛичное выздоровление: ${selfScore()}\n\nИтого качество моего выздоровления: ${totalScore()}`;
+  return `Качество моего выздоровления:\n\nВыздоровление в семье: ${familyScore()}\nВыздоровление на работе: ${workScore()}\nВыздоровление в обществе: ${societyScore()}\nЛичное выздоровление: ${selfScore()}\n\nо качество моего выздоровления: ${totalScore()}`;
 }
 async function shareResult(){
   const text = shareText();
@@ -447,7 +447,7 @@ function renderSelf(){
   return `<div class="screen"><div class="eyebrow">Этап 4</div><h1>Личное выздоровление</h1><p class="desc">Отвечай на один вопрос за раз. Интерфейс не мешает, вся логика расчёта сохранена.</p>${q.q?`<div class="card"><div class="questionNo">Вопрос ${q.index+1} из ${selfQuestions.length}</div><div class="questionText">${esc(q.q)}</div><div class="answers">${q.options.map(o=>`<button data-answer="${esc(o)}">${esc(o)}</button>`).join('')}</div></div>`:`<div class="card"><div style="font-size:24px;font-weight:700">Все вопросы заполнены</div></div>`}<div class="inlineAction">${renderActionNav('Завершить этап')}</div><div class="footerSpace"></div></div>`;
 }
 function renderResult(){
-  return `<div class="screen"><div class="eyebrow">Этап 5</div><h1>Качество моего выздоровления</h1><p class="desc">Только текущий срез на сегодня. При желании результат можно сразу отправить.</p><div class="heroScore"><div class="big">${totalScore()}</div><div class="sub">Спокойный итог без лишнего давления.</div></div><div class="summaryGrid" style="margin-top:14px"><div class="summaryCard ${scoreTone(familyScore())}"><div class="k">Выздоровление в семье</div><div class="v">${familyScore()}</div></div><div class="summaryCard ${scoreTone(workScore())}"><div class="k">Выздоровление на работе</div><div class="v">${workScore()}</div></div><div class="summaryCard ${scoreTone(societyScore())}"><div class="k">Выздоровление в обществе</div><div class="v">${societyScore()}</div></div><div class="summaryCard ${scoreTone(selfScore())}"><div class="k">Личное выздоровление</div><div class="v">${selfScore()}</div></div></div><div class="shareBox"><button class="primary" id="shareBtn">Поделиться результатом</button></div><div class="footerSpace"></div></div>`;
+  return `<div class="screen"><div class="eyebrow">Этап 5</div><h1>Качество моего выздоровления</h1><p class="desc">Только текущий срез на сегодня. При желании результат можно сразу отправить.</p><div class="heroScore"><div class="big">${totalScore()}</div><div class="sub">Общий итог.</div></div><div class="summaryGrid" style="margin-top:14px"><div class="summaryCard ${scoreTone(familyScore())}"><div class="k">Выздоровление в семье</div><div class="v">${familyScore()}</div></div><div class="summaryCard ${scoreTone(workScore())}"><div class="k">Выздоровление на работе</div><div class="v">${workScore()}</div></div><div class="summaryCard ${scoreTone(societyScore())}"><div class="k">Выздоровление в обществе</div><div class="v">${societyScore()}</div></div><div class="summaryCard ${scoreTone(selfScore())}"><div class="k">Личное выздоровление</div><div class="v">${selfScore()}</div></div></div><div class="shareBox"><button class="primary" id="shareBtn">Поделиться результатом</button></div><div class="footerSpace"></div></div>`;
 }
 
 function bindGlobalUI(){
