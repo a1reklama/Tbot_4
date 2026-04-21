@@ -144,7 +144,8 @@
       font-size:13px;font-weight:600;color:var(--text)
     }
     .menuBtn.danger{color:var(--danger)}
-    .menuIcon{font-size:20px;line-height:1}
+    .menuIcon{display:flex;align-items:center;justify-content:center;line-height:1}
+    .menuIcon svg{display:block;width:20px;height:20px}
     .footerSpace{height:182px}
     .stickyAction{
       position:fixed;left:50%;transform:translateX(-50%);
@@ -197,7 +198,7 @@
       .questionText{font-size:24px}
       .scoreGrid{grid-template-columns:repeat(4,minmax(0,1fr))}
       .summaryGrid{grid-template-columns:1fr}
-      .bottomMenu,.progressBottom,.stickyAction{width:calc(100vw - 12px)}
+      .bottomMenu,.progressBottom{width:calc(100vw - 12px)}
       .menuBtn{min-height:60px}
       .footerSpace{height:190px}
     }
@@ -217,7 +218,6 @@
     <div id="appRoot"></div>
   </div></div>
 
-  <div class="stickyAction" id="stickyAction"></div>
 
   <div class="progressBottom">
     <div class="progressMeta">
@@ -228,9 +228,34 @@
   </div>
 
   <div class="bottomMenu">
-    <button class="menuBtn" id="menuBtn"><span class="menuIcon">☰</span><span>Меню</span></button>
-    <button class="menuBtn" id="memoryBtn"><span class="menuIcon">👤</span><span>Имена</span></button>
-    <button class="menuBtn danger" id="restartTop"><span class="menuIcon">↺</span><span>Сбросить</span></button>
+    <button class="menuBtn" id="menuBtn">
+    <span class="menuIcon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+        <circle cx="5" cy="12" r="1.5" fill="currentColor"></circle>
+        <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+        <circle cx="19" cy="12" r="1.5" fill="currentColor"></circle>
+      </svg>
+    </span>
+    <span>Меню</span>
+  </button>
+    <button class="menuBtn" id="memoryBtn">
+    <span class="menuIcon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+        <circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"></circle>
+        <path d="M5 19c2-4 12-4 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+      </svg>
+    </span>
+    <span>Имена</span>
+  </button>
+    <button class="menuBtn danger" id="restartTop">
+    <span class="menuIcon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+        <path d="M4 12a8 8 0 1 0 2-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+        <path d="M4 4v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+      </svg>
+    </span>
+    <span>Сбросить</span>
+  </button>
   </div>
 
   <div class="modalWrap" id="modalWrap">
@@ -408,18 +433,18 @@ function renderActionNav(label='Завершить этап'){
 }
 
 function renderFamily(){
-  return `<div class="screen"><div class="eyebrow">Этап 1</div><h1>Семья</h1><p class="desc">Введи имя или степень родства, затем выбери оценку от 0 до 10.</p>${suggestionChips('family')}<div class="card"><input id="familyName" type="text" placeholder="Например: Мама" value="${esc(state.familyDraftName)}" /><div class="hint">Имя можно будет запомнить и использовать снова в следующий раз.</div>${state.error?`<div class="error">${esc(state.error)}</div>`:''}</div><div class="card">${scoreGrid('family')}</div>${state.familyItems.length?`<div class="list">${state.familyItems.map(i=>`<div class="row"><div><div class="name">${esc(i.name)}</div><div class="meta">Семья</div></div><strong>${i.score}</strong></div>`).join('')}</div>`:''}<div class="footerSpace"></div></div>`;
+  return `<div class="screen"><div class="eyebrow">Этап 1</div><h1>Семья</h1><p class="desc">Введи имя или степень родства, затем выбери оценку от 0 до 10.</p>${suggestionChips('family')}<div class="card"><input id="familyName" type="text" placeholder="Например: Мама" value="${esc(state.familyDraftName)}" /><div class="hint">Имя можно будет запомнить и использовать снова в следующий раз.</div>${state.error?`<div class="error">${esc(state.error)}</div>`:''}</div><div class="card">${scoreGrid('family')}</div>${state.familyItems.length?`<div class="list">${state.familyItems.map(i=>`<div class="row"><div><div class="name">${esc(i.name)}</div><div class="meta">Семья</div></div><strong>${i.score}</strong></div>`).join('')}</div>`:''}<div class="inlineAction">${renderActionNav('Завершить этап')}</div><div class="footerSpace"></div></div>`;
 }
 function renderWork(){
-  return `<div class="screen"><div class="eyebrow">Этап 2</div><h1>Работа / учёба</h1><p class="desc">Оцени отношения с людьми на работе или в учебном заведении.</p>${suggestionChips('work')}<div class="card"><input id="workName" type="text" placeholder="Например: Начальник" value="${esc(state.workDraftName)}" /><div class="hint">Можно писать роль, имя или короткое описание.</div>${state.error?`<div class="error">${esc(state.error)}</div>`:''}</div><div class="card">${scoreGrid('work')}</div>${state.workItems.length?`<div class="list">${state.workItems.map(i=>`<div class="row"><div><div class="name">${esc(i.name)}</div><div class="meta">Работа / учёба</div></div><strong>${i.score}</strong></div>`).join('')}</div>`:''}<div class="footerSpace"></div></div>`;
+  return `<div class="screen"><div class="eyebrow">Этап 2</div><h1>Работа / учёба</h1><p class="desc">Оцени отношения с людьми на работе или в учебном заведении.</p>${suggestionChips('work')}<div class="card"><input id="workName" type="text" placeholder="Например: Начальник" value="${esc(state.workDraftName)}" /><div class="hint">Можно писать роль, имя или короткое описание.</div>${state.error?`<div class="error">${esc(state.error)}</div>`:''}</div><div class="card">${scoreGrid('work')}</div>${state.workItems.length?`<div class="list">${state.workItems.map(i=>`<div class="row"><div><div class="name">${esc(i.name)}</div><div class="meta">Работа / учёба</div></div><strong>${i.score}</strong></div>`).join('')}</div>`:''}<div class="inlineAction">${renderActionNav('Завершить этап')}</div><div class="footerSpace"></div></div>`;
 }
 function renderSociety(){
   const selectedScore = Object.prototype.hasOwnProperty.call(state.societyScores, state.societySelected) ? state.societyScores[state.societySelected] : null;
-  return `<div class="screen"><div class="eyebrow">Этап 3</div><h1>Общество</h1><p class="desc">Выбери категорию и сразу поставь оценку. При желании можно добавить свою.</p><div class="card compact"><div class="chips">${societyPresets.map(n=>`<button class="chip ${state.societySelected===n?'on':''}" data-preset="${esc(n)}">${esc(n)}</button>`).join('')}</div></div><div class="card"><div class="sectionTitle">${esc(state.societySelected)}</div><div class="hint" style="margin-top:0;margin-bottom:12px">Можно выбрать оценку или пропустить.</div><button class="secondary" id="skipSocietyBtn" style="min-height:42px">Пропустить</button><div style="margin-top:12px">${scoreGrid('society', selectedScore)}</div></div>${suggestionChips('society')}<div class="card"><input id="customSocietyName" type="text" placeholder="Своя категория, например: Дворник" value="${esc(state.customSocietyName)}" /><div class="hint">Если стандартной категории нет, введи свою и выбери оценку ниже.</div>${state.error?`<div class="error">${esc(state.error)}</div>`:''}<div style="margin-top:12px">${scoreGrid('custom')}</div></div>${Object.keys(state.societyScores).length?`<div class="list">${Object.entries(state.societyScores).map(([k,v])=>`<div class="row"><div><div class="name">${esc(k)}</div><div class="meta">Общество</div></div><strong>${v===-1?'—':v}</strong></div>`).join('')}</div>`:''}<div class="footerSpace"></div></div>`;
+  return `<div class="screen"><div class="eyebrow">Этап 3</div><h1>Общество</h1><p class="desc">Выбери категорию и сразу поставь оценку. При желании можно добавить свою.</p><div class="card compact"><div class="chips">${societyPresets.map(n=>`<button class="chip ${state.societySelected===n?'on':''}" data-preset="${esc(n)}">${esc(n)}</button>`).join('')}</div></div><div class="card"><div class="sectionTitle">${esc(state.societySelected)}</div><div class="hint" style="margin-top:0;margin-bottom:12px">Можно выбрать оценку или пропустить.</div><button class="secondary" id="skipSocietyBtn" style="min-height:42px">Пропустить</button><div style="margin-top:12px">${scoreGrid('society', selectedScore)}</div></div>${suggestionChips('society')}<div class="card"><input id="customSocietyName" type="text" placeholder="Своя категория, например: Дворник" value="${esc(state.customSocietyName)}" /><div class="hint">Если стандартной категории нет, введи свою и выбери оценку ниже.</div>${state.error?`<div class="error">${esc(state.error)}</div>`:''}<div style="margin-top:12px">${scoreGrid('custom')}</div></div>${Object.keys(state.societyScores).length?`<div class="list">${Object.entries(state.societyScores).map(([k,v])=>`<div class="row"><div><div class="name">${esc(k)}</div><div class="meta">Общество</div></div><strong>${v===-1?'—':v}</strong></div>`).join('')}</div>`:''}<div class="inlineAction">${renderActionNav('Завершить этап')}</div><div class="footerSpace"></div></div>`;
 }
 function renderSelf(){
   const q = currentQuestionInfo();
-  return `<div class="screen"><div class="eyebrow">Этап 4</div><h1>Личное выздоровление</h1><p class="desc">Отвечай на один вопрос за раз. Интерфейс не мешает, вся логика расчёта сохранена.</p>${q.q?`<div class="card"><div class="questionNo">Вопрос ${q.index+1} из ${selfQuestions.length}</div><div class="questionText">${esc(q.q)}</div><div class="answers">${q.options.map(o=>`<button data-answer="${esc(o)}">${esc(o)}</button>`).join('')}</div></div>`:`<div class="card"><div style="font-size:24px;font-weight:700">Все вопросы заполнены</div></div>`}<div class="footerSpace"></div></div>`;
+  return `<div class="screen"><div class="eyebrow">Этап 4</div><h1>Личное выздоровление</h1><p class="desc">Отвечай на один вопрос за раз. Интерфейс не мешает, вся логика расчёта сохранена.</p>${q.q?`<div class="card"><div class="questionNo">Вопрос ${q.index+1} из ${selfQuestions.length}</div><div class="questionText">${esc(q.q)}</div><div class="answers">${q.options.map(o=>`<button data-answer="${esc(o)}">${esc(o)}</button>`).join('')}</div></div>`:`<div class="card"><div style="font-size:24px;font-weight:700">Все вопросы заполнены</div></div>`}<div class="inlineAction">${renderActionNav('Завершить этап')}</div><div class="footerSpace"></div></div>`;
 }
 function renderResult(){
   return `<div class="screen"><div class="eyebrow">Этап 5</div><h1>Качество моего выздоровления</h1><p class="desc">Только текущий срез на сегодня. При желании результат можно сразу отправить.</p><div class="heroScore"><div class="big">${totalScore()}</div><div class="sub">Спокойный итог без лишнего давления.</div></div><div class="summaryGrid" style="margin-top:14px"><div class="summaryCard ${scoreTone(familyScore())}"><div class="k">Выздоровление в семье</div><div class="v">${familyScore()}</div></div><div class="summaryCard ${scoreTone(workScore())}"><div class="k">Выздоровление на работе</div><div class="v">${workScore()}</div></div><div class="summaryCard ${scoreTone(societyScore())}"><div class="k">Выздоровление в обществе</div><div class="v">${societyScore()}</div></div><div class="summaryCard ${scoreTone(selfScore())}"><div class="k">Личное выздоровление</div><div class="v">${selfScore()}</div></div></div><div class="shareBox"><button class="primary" id="shareBtn">Поделиться результатом</button></div><div class="footerSpace"></div></div>`;
@@ -468,14 +493,9 @@ function bindSuggestions(){
   });
 }
 
-function renderActionArea(){
-  const area = document.getElementById('stickyAction');
-  area.innerHTML = state.stage === 5 ? '' : renderActionNav('Завершить этап');
-}
 
 function render(){
   updateProgress();
-  renderActionArea();
   const root = document.getElementById('appRoot');
   if(state.stage === 1) root.innerHTML = renderFamily();
   if(state.stage === 2) root.innerHTML = renderWork();
