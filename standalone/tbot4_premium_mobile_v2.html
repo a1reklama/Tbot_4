@@ -239,7 +239,7 @@ const state = { stage:1, familyItems:[], workItems:[], familyDraftName:'', workD
 
 const esc = s => String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 const mean = values => { const f = values.filter(v => typeof v === 'number' && Number.isFinite(v) && v >= 0); return f.length ? Math.round(f.reduce((a,b)=>a+b,0) / f.length) : 0; };
-const stageTitle = () => ({1:'Семья',2:'Работа / учёба',3:'Общество',4:'Личное выздоровление',5:'Качество моего выздоровления'})[state.stage];
+const stageTitle = () => ({1:'Семья',2:'Работа / учёба',3:'Общество',4:'Качество отношений с самим собой',5:'Качество моего выздоровления'})[state.stage];
 const progressValue = () => state.stage===1 ? 20 : state.stage===2 ? 40 : state.stage===3 ? 60 : state.stage===4 ? 80 + Math.round((Object.keys(state.selfAnswers).length / selfQuestions.length) * 20) : 100;
 const scoreTone = s => s >= 8 ? 'tone-high' : s >= 4 ? 'tone-mid' : 'tone-low';
 
@@ -332,7 +332,7 @@ function addCustomSociety(name, score){
   render();
 }
 function shareText(){
-  return `Качество моего выздоровления:\n\nКачество отношений с семьей: ${familyScore()}\nКачество отношений на работе: ${workScore()}\nКачество отношений с обществом: ${societyScore()}\nЛичное выздоровление: ${selfScore()}\n\nИтого качество моего выздоровления: ${totalScore()}`;
+  return `Качество моего выздоровления:\n\nКачество отношений с семьей: ${familyScore()}\nКачество отношений на работе: ${workScore()}\nКачество отношений с обществом: ${societyScore()}\nКачество отношений с самим собой: ${selfScore()}\n\nИтого качество моего выздоровления: ${totalScore()}`;
 }
 async function shareResult(){
   const text = shareText();
@@ -442,7 +442,7 @@ function renderSociety(){
 function renderSelf(){
   const q = currentQuestionInfo();
   return `<div class="screen">
-    <h1 class="stageTitle">Личное выздоровление</h1>
+    <h1 class="stageTitle">Качество отношений с самим собой</h1>
     <div class="stageMeta">Этап ${state.stage} из 5</div>
     <div class="lead">Отвечай на один вопрос за раз</div>
     <div class="card">
@@ -460,10 +460,10 @@ function renderResult(){
     <div class="hero"><div class="heroBig">${totalScore()}</div><div class="heroSub">Итого качество моей жизни
 </div></div>
     <div class="summaryGrid">
-      <div class="summaryCard ${scoreTone(familyScore())}"><div class="summaryKey">Выздоровление в семье</div><div class="summaryVal">${familyScore()}</div></div>
-      <div class="summaryCard ${scoreTone(workScore())}"><div class="summaryKey">Выздоровление на работе</div><div class="summaryVal">${workScore()}</div></div>
-      <div class="summaryCard ${scoreTone(societyScore())}"><div class="summaryKey">Выздоровление в обществе</div><div class="summaryVal">${societyScore()}</div></div>
-      <div class="summaryCard ${scoreTone(selfScore())}"><div class="summaryKey">Личное выздоровление</div><div class="summaryVal">${selfScore()}</div></div>
+      <div class="summaryCard ${scoreTone(familyScore())}"><div class="summaryKey">Качество отношений с семьей</div><div class="summaryVal">${familyScore()}</div></div>
+      <div class="summaryCard ${scoreTone(workScore())}"><div class="summaryKey">Качество отношений на работе</div><div class="summaryVal">${workScore()}</div></div>
+      <div class="summaryCard ${scoreTone(societyScore())}"><div class="summaryKey">Качество отношений с обществом</div><div class="summaryVal">${societyScore()}</div></div>
+      <div class="summaryCard ${scoreTone(selfScore())}"><div class="summaryKey">Качество отношений с самим собой</div><div class="summaryVal">${selfScore()}</div></div>
     </div>
     <div class="shareBox"><button class="shareSecondary" id="shareBtn"><span class="shareIcon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path><path d="M8 9l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 19h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span><span>Поделиться результатом</span></button></div>
     ${progressBlock()}
@@ -487,7 +487,7 @@ function bindGlobalUI(){
         <div class="guideItem"><strong>Семья</strong>Введи имя или степень родства и выбери оценку.</div>
         <div class="guideItem"><strong>Работа / учёба</strong>Введи роль, имя или короткое описание человека и выбери оценку.</div>
         <div class="guideItem"><strong>Общество</strong>Выбери готовую категорию или добавь свою.</div>
-        <div class="guideItem"><strong>Личное выздоровление</strong>Отвечай на вопросы по одному.</div>
+        <div class="guideItem"><strong>Качество отношений с самим собой</strong>Отвечай на вопросы по одному.</div>
         <div class="guideItem"><strong>Имена</strong>Сохранённые имена можно использовать повторно через кнопку «Имена» внизу.</div>
       `);
     };
