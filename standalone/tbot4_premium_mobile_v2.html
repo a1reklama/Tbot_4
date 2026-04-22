@@ -432,7 +432,7 @@ function renderFamily(){
     <div class="lead">Введи имя → выбери оценку</div>
     ${suggestionChips('family')}
     <div class="card">
-      <input id="familyName" class="input" type="text" placeholder="Например: Мама" value="${esc(state.familyDraftName)}" />
+    <input id="familyName" class="input" type="text" inputmode="text" autocomplete="new-password" autocorrect="off" autocapitalize="words" spellcheck="false" placeholder="Например: Мама" value="${esc(state.familyDraftName)}" />
       <div class="hint">Можно ввести имя или степень родства</div>
       ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
     </div>
