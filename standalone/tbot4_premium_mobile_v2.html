@@ -332,7 +332,7 @@ function addCustomSociety(name, score){
   render();
 }
 function shareText(){
-  return `Качество моего выздоровления:\n\nВыздоровление в семье: ${familyScore()}\nВыздоровление на работе: ${workScore()}\nВыздоровление в обществе: ${societyScore()}\nЛичное выздоровление: ${selfScore()}\n\nИтого качество моего выздоровления: ${totalScore()}`;
+  return `Качество моего выздоровления:\n\nКачество отношений с семьей: ${familyScore()}\nКачество отношений на работе: ${workScore()}\nКачество отношений с обществом: ${societyScore()}\nЛичное выздоровление: ${selfScore()}\n\nИтого качество моего выздоровления: ${totalScore()}`;
 }
 async function shareResult(){
   const text = shareText();
@@ -457,7 +457,8 @@ function renderResult(){
     <h1 class="stageTitle">Качество моего выздоровления</h1>
     <div class="stageMeta">Этап ${state.stage} из 5</div>
     <div class="lead">Только текущий срез на сегодня</div>
-    <div class="hero"><div class="heroBig">${totalScore()}</div><div class="heroSub">Спокойный итог без лишнего давления</div></div>
+    <div class="hero"><div class="heroBig">${totalScore()}</div><div class="heroSub">Итого качество моей жизни
+</div></div>
     <div class="summaryGrid">
       <div class="summaryCard ${scoreTone(familyScore())}"><div class="summaryKey">Выздоровление в семье</div><div class="summaryVal">${familyScore()}</div></div>
       <div class="summaryCard ${scoreTone(workScore())}"><div class="summaryKey">Выздоровление на работе</div><div class="summaryVal">${workScore()}</div></div>
