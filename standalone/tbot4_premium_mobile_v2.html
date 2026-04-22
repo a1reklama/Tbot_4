@@ -5,109 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Калькулятор выздоровления</title>
   <style>
-    :root{
-      --bg:#f5f5f7;
-      --panel:#ffffffee;
-      --card:#fff;
-      --text:#1d1d1f;
-      --muted:#6e6e73;
-      --line:rgba(60,60,67,.16);
-      --blue:#0a84ff;
-      --danger:#c9342f;
-      --shadow:0 10px 28px rgba(0,0,0,.06);
-    }
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0}
-    body{
-      min-height:100vh;
-      background:var(--bg);
-      color:var(--text);
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;
-    }
+    :root{--bg:#f5f5f7;--panel:#ffffffee;--card:#fff;--text:#1d1d1f;--muted:#6e6e73;--line:rgba(60,60,67,.16);--blue:#0a84ff;--danger:#c9342f;--shadow:0 10px 28px rgba(0,0,0,.06)}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent} html,body{margin:0}
+    body{min-height:100vh;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
     .app{max-width:460px;margin:0 auto;min-height:100vh;background:var(--bg)}
-    .topbar{
-      position:sticky;top:0;z-index:10;
-      display:flex;align-items:center;gap:10px;
-      padding:12px 14px 10px;
-      background:var(--panel);
-      backdrop-filter:saturate(180%) blur(18px);
-      border-bottom:1px solid rgba(60,60,67,.08);
-    }
-    .badge12{
-      width:34px;height:34px;border-radius:50%;
-      border:2px solid var(--danger);color:var(--danger);
-      display:flex;align-items:center;justify-content:center;
-      font-size:18px;font-weight:700;background:#fff;flex:0 0 auto;
-    }
+    .topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:10px;padding:12px 14px 10px;background:var(--panel);backdrop-filter:saturate(180%) blur(18px);border-bottom:1px solid rgba(60,60,67,.08)}
+    .badge12{width:34px;height:34px;border-radius:50%;border:2px solid var(--danger);color:var(--danger);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;background:#fff;flex:0 0 auto}
     .topbarTitle{font-size:16px;font-weight:600;letter-spacing:-.02em}
     .screen{padding:12px 14px 100px}
     .stageTitle{font-size:26px;font-weight:700;letter-spacing:-.03em;margin:0}
     .stageMeta{font-size:12px;color:var(--muted);margin-top:2px}
     .lead{font-size:14px;color:var(--muted);margin:10px 0 12px;line-height:1.35}
-    .card{
-      background:var(--card);
-      border:1px solid rgba(60,60,67,.10);
-      border-radius:22px;
-      padding:12px;
-      box-shadow:var(--shadow);
-      margin-bottom:10px;
-    }
-    .input{
-      width:100%;
-      height:48px;
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:0 14px;
-      font-size:16px;
-      background:#fff;
-      color:var(--text);
-      outline:none;
-    }
+    .card{background:var(--card);border:1px solid rgba(60,60,67,.10);border-radius:22px;padding:12px;box-shadow:var(--shadow);margin-bottom:10px}
+    .input{width:100%;height:48px;border:1px solid var(--line);border-radius:14px;padding:0 14px;font-size:16px;background:#fff;color:var(--text);outline:none}
     .input:focus{border-color:rgba(10,132,255,.45);box-shadow:0 0 0 4px rgba(10,132,255,.10)}
     .hint{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.35}
-    .error{
-      margin-top:8px;padding:10px 12px;border-radius:14px;
-      background:#fff5f4;border:1px solid rgba(201,52,47,.16);color:var(--danger);font-size:13px
-    }
+    .error{margin-top:8px;padding:10px 12px;border-radius:14px;background:#fff5f4;border:1px solid rgba(201,52,47,.16);color:var(--danger);font-size:13px}
     .savedTitle{font-size:14px;font-weight:700;margin-bottom:8px}
     .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{
-      min-height:34px;padding:0 12px;border-radius:999px;border:none;
-      background:rgba(10,132,255,.12);color:#0066cc;font-size:14px;font-weight:600
-    }
+    .chip{min-height:34px;padding:0 12px;border-radius:999px;border:none;background:rgba(10,132,255,.12);color:#0066cc;font-size:14px;font-weight:600}
     .chip.activeChip{background:rgba(10,132,255,.20);color:#004ea8;box-shadow:inset 0 0 0 1px rgba(10,132,255,.22)}
     .scoreAnchor{font-size:13px;color:var(--muted);margin-bottom:8px}
-    .scoreGrid{
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:8px;
-    }
-    .scoreBtn{
-      min-height:46px;border-radius:14px;background:#fff;border:1px solid var(--line);
-      font-size:16px;font-weight:700;color:var(--text)
-    }
-        .scoreBtn.active{background:#111;color:#fff;border-color:#111}
-    .actionRow{display:flex;gap:8px;margin-top:12px}
-    .actionRow > *{flex:1}
-    button{
-      appearance:none;border:none;cursor:pointer;
-      min-height:48px;border-radius:16px;padding:0 14px;
-      font-size:16px;font-weight:600;display:inline-flex;align-items:center;justify-content:center
-    }
-.primary{background:var(--blue);color:#fff}
-    .shareSecondary{
-      min-height:46px;
-      border-radius:14px;
-      background:#f2f2f7;
-      color:var(--blue);
-      border:1px solid rgba(10,132,255,.10);
-      justify-content:flex-start;
-      gap:8px;
-      padding:0 14px;
-      font-size:15px;
-      font-weight:600
-    }
+    .scoreGrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+    .scoreBtn{min-height:46px;border-radius:14px;background:#fff;border:1px solid var(--line);font-size:16px;font-weight:700;color:var(--text)}
+    .scoreBtn.active{background:#111;color:#fff;border-color:#111}
+    .actionRow{display:flex;gap:8px;margin-top:12px}.actionRow>*{flex:1}
+    button{appearance:none;border:none;cursor:pointer;min-height:48px;border-radius:16px;padding:0 14px;font-size:16px;font-weight:600;display:inline-flex;align-items:center;justify-content:center}
+    .primary{background:var(--blue);color:#fff}
     .secondary{background:#f1f1f4;color:var(--text)}
+    .shareSecondary{min-height:46px;border-radius:14px;background:#f2f2f7;color:var(--blue);border:1px solid rgba(10,132,255,.10);justify-content:flex-start;gap:8px;padding:0 14px;font-size:15px;font-weight:600}
     .danger{background:#fff;border:1px solid rgba(201,52,47,.18);color:var(--danger)}
     .small{min-height:40px;border-radius:14px;font-size:15px}
     .progressWrap{margin:8px 0 14px}
@@ -115,164 +41,71 @@
     .progress{height:8px;background:#e7e7ea;border-radius:999px;overflow:hidden}
     .progressFill{height:100%;background:linear-gradient(90deg,var(--blue),#61b0ff);width:0}
     .list{display:grid;gap:8px}
-    .row{
-      display:flex;justify-content:space-between;align-items:center;gap:10px;
-      padding:12px 14px;border-radius:18px;background:#fff;border:1px solid var(--line)
-    }
-    .rowName{font-weight:600}
-    .rowMeta{font-size:12px;color:var(--muted);margin-top:2px}
-    .rowScore{font-size:18px;font-weight:700}
+    .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-radius:18px;background:#fff;border:1px solid var(--line)}
+    .rowName{font-weight:600}.rowMeta{font-size:12px;color:var(--muted);margin-top:2px}.rowScore{font-size:18px;font-weight:700}
     .questionNo{font-size:12px;color:var(--muted);margin-bottom:8px}
     .questionText{font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.12}
     .answers{display:grid;gap:10px;margin-top:14px}
-    .answers button{
-      width:100%;min-height:54px;border-radius:16px;background:#fff;border:1px solid var(--line);
-      font-size:17px;font-weight:700;color:var(--text)
-    }
-   .hero{
-      background:linear-gradient(180deg,#fff,#f6fbff);
-      border:1px solid rgba(10,132,255,.16);
-      border-radius:26px;
-      padding:18px
-    }
-    .heroBig{
-      font-size:56px;
-      font-weight:700;
-      letter-spacing:-.06em;
-      line-height:1
-    }
-    .heroSub{
-      font-size:14px;
-      color:var(--muted);
-      margin-top:10px;
-      line-height:1.35
-    }
-.summaryGrid{
-      display:grid;
-      gap:10px;
-      margin-top:12px
-    }
-    .summaryCard{
-      padding:16px;
-      border-radius:20px;
-      background:#fff;
-      border:1px solid rgba(60,60,67,.10)
-    }
-    .summaryKey{
-      font-size:13px;
-      color:var(--muted);
-      margin-bottom:8px;
-      line-height:1.3
-    }
-    .summaryVal{
-      font-size:30px;
-      font-weight:700;
-      letter-spacing:-.04em
-    }
-   .bottomMenu{
-      position:fixed;left:50%;transform:translateX(-50%);bottom:8px;z-index:20;
-      width:min(460px, calc(100vw - 10px));
-      display:grid;grid-template-columns:.8fr 1fr 1fr;gap:8px;
-      padding:7px;border-radius:18px;background:var(--panel);
-      backdrop-filter:saturate(180%) blur(18px);border:1px solid rgba(60,60,67,.10);
-      box-shadow:0 8px 22px rgba(0,0,0,.07);
-    }
- .menuBtn{
-      min-height:52px;border-radius:14px;background:#fff;border:1px solid rgba(60,60,67,.12);
-      display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;
-      font-size:12px;font-weight:600;color:var(--text)
-    }
+    .answers button{width:100%;min-height:54px;border-radius:16px;background:#fff;border:1px solid var(--line);font-size:17px;font-weight:700;color:var(--text)}
+    .hero{background:linear-gradient(180deg,#fff,#f6fbff);border:1px solid rgba(10,132,255,.16);border-radius:26px;padding:18px}
+    .heroBig{font-size:56px;font-weight:700;letter-spacing:-.06em;line-height:1}
+    .heroSub{font-size:14px;color:var(--muted);margin-top:10px;line-height:1.35}
+    .summaryGrid{display:grid;gap:10px;margin-top:12px}
+    .summaryCard{padding:16px;border-radius:20px;background:#fff;border:1px solid rgba(60,60,67,.10)}
+    .summaryKey{font-size:13px;color:var(--muted);margin-bottom:8px;line-height:1.3}
+    .summaryVal{font-size:30px;font-weight:700;letter-spacing:-.04em}
+    .bottomMenu{position:fixed;left:50%;transform:translateX(-50%);bottom:8px;z-index:20;width:min(460px, calc(100vw - 10px));display:grid;grid-template-columns:.8fr 1fr 1fr;gap:8px;padding:7px;border-radius:18px;background:var(--panel);backdrop-filter:saturate(180%) blur(18px);border:1px solid rgba(60,60,67,.10);box-shadow:0 8px 22px rgba(0,0,0,.07)}
+    .menuBtn{min-height:52px;border-radius:14px;background:#fff;border:1px solid rgba(60,60,67,.12);display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--text)}
     .menuBtn.dangerText{color:var(--danger)}
-    .menuIcon{display:flex;align-items:center;justify-content:center}
-    .menuIcon svg{width:20px;height:20px;display:block}
-    .modalWrap{position:fixed;inset:0;background:rgba(0,0,0,.34);display:none;align-items:flex-end;justify-content:center;z-index:100}
-    .modalWrap.show{display:flex}
-    .modal{
-      width:min(460px,100%);max-height:86vh;overflow:auto;background:#fff;
-      border-radius:26px 26px 0 0;padding:16px 14px 20px;box-shadow:0 -10px 30px rgba(0,0,0,.18)
-    }
+    .menuIcon{display:flex;align-items:center;justify-content:center}.menuIcon svg{display:block;width:20px;height:20px}
+    .shareIcon{display:inline-flex;align-items:center;justify-content:center}.shareIcon svg{width:18px;height:18px;display:block}
+    .modalWrap{position:fixed;inset:0;background:rgba(0,0,0,.34);display:none;align-items:flex-end;justify-content:center;z-index:100}.modalWrap.show{display:flex}
+    .modal{width:min(460px,100%);max-height:86vh;overflow:auto;background:#fff;border-radius:26px 26px 0 0;padding:16px 14px 20px;box-shadow:0 -10px 30px rgba(0,0,0,.18)}
     .grab{width:44px;height:5px;border-radius:999px;background:#d2d2d7;margin:2px auto 14px}
-    .modal h3{margin:0 0 10px;font-size:22px;letter-spacing:-.03em}
-    .modal p{margin:0 0 12px;color:var(--muted);line-height:1.45}
-    .sheetList{display:grid;gap:10px}
-    .sheetBtn{width:100%;justify-content:flex-start;border-radius:16px;background:#fff;border:1px solid var(--line)}
+    .modal h3{margin:0 0 10px;font-size:22px;letter-spacing:-.03em}.modal p{margin:0 0 12px;color:var(--muted);line-height:1.45}
+    .sheetList{display:grid;gap:10px}.sheetBtn{width:100%;justify-content:flex-start;border-radius:16px;background:#fff;border:1px solid var(--line)}
     .tinyBtn{min-height:34px;padding:0 12px;font-size:14px;border-radius:999px;background:#fff;border:1px solid var(--line)}
-    .memoryItem{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(60,60,67,.08)}
-    .memoryItem:last-child{border-bottom:none}
+    .memoryItem{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(60,60,67,.08)} .memoryItem:last-child{border-bottom:none}
     .empty{color:var(--muted);font-size:14px}
     .guideItem{padding:12px 14px;border-radius:16px;background:#fafafc;border:1px solid rgba(60,60,67,.08);margin-bottom:8px}
     .guideItem strong{display:block;margin-bottom:4px}
     @media (min-width:900px){
-      body{
-        padding:24px;
-        background:#eef1f5
-      }
-      .app{
-        max-width:520px;
-        border-radius:28px;
-        overflow:hidden;
-        box-shadow:0 18px 44px rgba(0,0,0,.10)
-      }
+      body{padding:24px;background:#eef1f5}
+      .app{max-width:520px;border-radius:28px;overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,.10)}
       .bottomMenu{width:520px}
       .screen{padding-bottom:110px}
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <div class="topbar">
-      <div class="badge12">12</div>
-      <div class="topbarTitle">Калькулятор выздоровления</div>
-    </div>
-    <div id="appRoot"></div>
+<div class="app">
+  <div class="topbar">
+    <div class="badge12">12</div>
+    <div class="topbarTitle">Калькулятор выздоровления</div>
   </div>
+  <div id="appRoot"></div>
+</div>
 
-  <div class="bottomMenu">
-    <button class="menuBtn" id="menuBtn">
-      <span class="menuIcon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none">
-          <circle cx="5" cy="12" r="1.5" fill="currentColor"></circle>
-          <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
-          <circle cx="19" cy="12" r="1.5" fill="currentColor"></circle>
-        </svg>
-      </span>
-      <span>Меню</span>
-    </button>
-    <button class="menuBtn" id="memoryBtn">
-      <span class="menuIcon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"></circle>
-          <path d="M5 19c2-4 12-4 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
-        </svg>
-      </span>
-      <span>Имена</span>
-    </button>
-    <button class="menuBtn dangerText" id="restartTop">
-      <span class="menuIcon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M4 12a8 8 0 1 0 2-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
-          <path d="M4 4v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
-        </svg>
-      </span>
-      <span>Сбросить</span>
-    </button>
-  </div>
+<div class="bottomMenu">
+  <button class="menuBtn" id="menuBtn"><span class="menuIcon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="5" cy="12" r="1.5" fill="currentColor"></circle><circle cx="12" cy="12" r="1.5" fill="currentColor"></circle><circle cx="19" cy="12" r="1.5" fill="currentColor"></circle></svg></span><span>Меню</span></button>
+  <button class="menuBtn" id="memoryBtn"><span class="menuIcon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.8"></circle><path d="M5 19c2-4 12-4 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span><span>Имена</span></button>
+  <button class="menuBtn dangerText" id="restartTop"><span class="menuIcon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 0 2-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path><path d="M4 4v4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span><span>Сбросить</span></button>
+</div>
 
-  <div class="modalWrap" id="modalWrap">
-    <div class="modal">
-      <div class="grab"></div>
-      <div id="modalContent"></div>
-      <button class="primary" id="closeModal" style="width:100%;margin-top:10px">Закрыть</button>
-    </div>
+<div class="modalWrap" id="modalWrap">
+  <div class="modal">
+    <div class="grab"></div>
+    <div id="modalContent"></div>
+    <button class="primary" id="closeModal" style="width:100%;margin-top:10px">Закрыть</button>
   </div>
+</div>
 
 <script>
 const SUPPORT_URL = "";
 const VIDEO_URL = "";
 const SUPPORT_TEXT = "Здесь можно разместить ссылку на группу поддержки, чат с куратором или короткую памятку, куда обратиться.";
 const VIDEO_TEXT = "Здесь можно разместить ссылку на видеоинструкцию или короткий текст о том, как правильно проходить тест.";
-const STORAGE_KEYS = { family:'t12_saved_family_names_v8', work:'t12_saved_work_names_v8', society:'t12_saved_society_names_v8' };
-
+const STORAGE_KEYS = { family:'t12_saved_family_names_final', work:'t12_saved_work_names_final', society:'t12_saved_society_names_final' };
 const societyPresets = ['Соседи','Курьеры','Кассиры в супермаркете','Люди в очередях','Работники сферы обслуживания','Сотрудники банка','Прохожие на улице','Люди в транспорте','Водители соседних машин','Полиция','Чиновники','Врачи','Таксисты','Продавцы','Официанты','Охранники'];
 const beliefQuestion = 'Верю ли я, что существует что-то невидимое и доброе, что помогает мне каждый день?';
 const selfQuestions = ['Когда мне плохо, обращаюсь ли я сразу к врачу?','Ем ли я здоровую еду?','Поддерживаю ли я режим регулярного питания?','Соблюдаю ли я личную гигиену, чищу ли я зубы утром и вечером?','Активен ли я физически, насколько часто я занимаюсь спортом или делаю зарядку?','Есть ли у меня хобби, какие-то увлечения помимо работы?','Есть ли у меня друзья, провожу ли я с ними время?',beliefQuestion,'Обращаюсь ли я ежедневно к Богу, или к какой-то высшей силе?','Употребляю ли я наркотики?','Пью ли я алкоголь?','Играю ли я на деньги?','Делаю ли я ставки?','Изменяю ли я любимому человеку?','Применяю ли я насилие над кем-либо — эмоциональное или физическое?','Присваиваю ли я чужие деньги?','Торчу ли я на интернет порно?','Трачу ли я больше часа в день на чтение новостей?','Залипаю ли я в социальных сетях или в мессенджерах?','Курю ли я?','Пью ли я без меры кофе или энергетики?','Страдаю ли я от трудоголизма?','Страдаю ли я от беспорядочного секса?','Беру ли я в долг?','Вёлся ли я словами или действиями на какую-то другую одержимость?'];
@@ -280,360 +113,106 @@ const hardZeroQuestions = new Set(['Употребляю ли я наркоти�
 const capAtThreeQuestions = new Set(['Курю ли я?','Вёлся ли я словами или действиями на какую-то другую одержимость?']);
 const obsessionQuestions = ['Употребляю ли я наркотики?','Пью ли я алкоголь?','Играю ли я на деньги?','Делаю ли я ставки?','Изменяю ли я любимому человеку?','Применяю ли я насилие над кем-либо — эмоциональное или физическое?','Присваиваю ли я чужие деньги?','Торчу ли я на интернет порно?','Трачу ли я больше часа в день на чтение новостей?','Залипаю ли я в социальных сетях или в мессенджерах?','Курю ли я?','Пью ли я без меры кофе или энергетики?','Страдаю ли я от трудоголизма?','Страдаю ли я от беспорядочного секса?','Беру ли я в долг?','Вёлся ли я словами или действиями на какую-то другую одержимость?'];
 const yesNoQuestions = new Set(['Употребляю ли я наркотики?','Пью ли я алкоголь?','Играю ли я на деньги?','Делаю ли я ставки?','Изменяю ли я любимому человеку?','Применяю ли я насилие над кем-либо — эмоциональное или физическое?','Присваиваю ли я чужие деньги?','Торчу ли я на интернет порно?','Трачу ли я больше часа в день на чтение новостей?','Залипаю ли я в социальных сетях или в мессенджерах?','Курю ли я?','Пью ли я без меры кофе или энергетики?','Страдаю ли я от трудоголизма?','Страдаю ли я от беспорядочного секса?','Беру ли я в долг?','Вёлся ли я словами или действиями на какую-то другую одержимость?', beliefQuestion]);
-
 const freqOptions = ['Никогда','Редко','Иногда','Часто','Всегда'];
 const ynOptions = ['Да','Нет'];
 const state = { stage:1, familyItems:[], workItems:[], familyDraftName:'', workDraftName:'', societySelected:societyPresets[0], societyScores:{}, customSocietyName:'', selfAnswers:{}, error:'' };
 
 const esc = s => String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 const mean = values => { const f = values.filter(v => typeof v === 'number' && Number.isFinite(v) && v >= 0); return f.length ? Math.round(f.reduce((a,b)=>a+b,0) / f.length) : 0; };
-const stageTitle = () => ({1:'Семья',2:'Работа / учёба',3:'Общество',4:'Качество отношений с самим собой',5:'Качество моего выздоровления'})[state.stage];
+const stageTitle = () => ({1:'Семья',2:'Работа / учёба',3:'Общество',4:'Качество отношений с самим собой',5:'Качество моей жизни'})[state.stage];
 const progressValue = () => state.stage===1 ? 20 : state.stage===2 ? 40 : state.stage===3 ? 60 : state.stage===4 ? 80 + Math.round((Object.keys(state.selfAnswers).length / selfQuestions.length) * 20) : 100;
 const scoreTone = s => s >= 8 ? 'tone-high' : s >= 4 ? 'tone-mid' : 'tone-low';
-
-function mapAnswerToScore(q,a){
-  if(!a) return 0;
-  if(q === beliefQuestion) return a === 'Верю' ? 10 : 0;
-  if(yesNoQuestions.has(q)) return a === 'Нет' ? 10 : 0;
-  const m = {'Никогда':0,'Редко':3,'Иногда':5,'Часто':8,'Всегда':10};
-  return m[a] ?? 0;
-}
-function calculateSelfScore(ans){
-  const base = mean(Object.entries(ans).map(([q,a]) => mapAnswerToScore(q,a)));
-  if([...hardZeroQuestions].some(q => ans[q] === 'Да')) return 0;
-  const count = obsessionQuestions.filter(q => ans[q] === 'Да').length;
-  if(count >= 4) return 0;
-  if([...capAtThreeQuestions].some(q => ans[q] === 'Да')) return Math.min(base, 3);
-  return base;
-}
+function mapAnswerToScore(q,a){ if(!a) return 0; if(q === beliefQuestion) return a === 'Верю' ? 10 : 0; if(yesNoQuestions.has(q)) return a === 'Нет' ? 10 : 0; const m={'Никогда':0,'Редко':3,'Иногда':5,'Часто':8,'Всегда':10}; return m[a] ?? 0; }
+function calculateSelfScore(ans){ const base=mean(Object.entries(ans).map(([q,a]) => mapAnswerToScore(q,a))); if([...hardZeroQuestions].some(q => ans[q] === 'Да')) return 0; const count=obsessionQuestions.filter(q => ans[q] === 'Да').length; if(count >= 4) return 0; if([...capAtThreeQuestions].some(q => ans[q] === 'Да')) return Math.min(base, 3); return base; }
 const familyScore = () => mean(state.familyItems.map(x=>x.score));
 const workScore = () => mean(state.workItems.map(x=>x.score));
 const societyScore = () => mean(Object.values(state.societyScores));
 const selfScore = () => calculateSelfScore(state.selfAnswers);
 const totalScore = () => mean([familyScore(), workScore(), societyScore(), selfScore()]);
-
 const safeLoad = key => { try { const raw = localStorage.getItem(key); const parsed = raw ? JSON.parse(raw) : []; return Array.isArray(parsed) ? parsed : []; } catch(e){ return []; } };
 const safeSave = (key,val) => { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e){} };
 const getSavedNames = group => safeLoad(STORAGE_KEYS[group]);
-
-function rememberName(group, name){
-  const clean = String(name || '').trim();
-  if(!clean) return;
-  const list = getSavedNames(group).filter(x => x !== clean);
-  list.unshift(clean);
-  safeSave(STORAGE_KEYS[group], list.slice(0,20));
-}
+function rememberName(group, name){ const clean=String(name || '').trim(); if(!clean) return; const list=getSavedNames(group).filter(x => x !== clean); list.unshift(clean); safeSave(STORAGE_KEYS[group], list.slice(0,20)); }
 const removeSavedName = (group,name) => safeSave(STORAGE_KEYS[group], getSavedNames(group).filter(x => x !== name));
 const clearAllSavedNames = () => Object.values(STORAGE_KEYS).forEach(k => { try { localStorage.removeItem(k); } catch(e){} });
+function restartAll(){ Object.assign(state, {stage:1, familyItems:[], workItems:[], familyDraftName:'', workDraftName:'', societySelected:societyPresets[0], societyScores:{}, customSocietyName:'', selfAnswers:{}, error:''}); render(); window.scrollTo({top:0, behavior:'smooth'}); }
+function resetCurrentStage(){ state.error=''; if(state.stage===1){ state.familyItems=[]; state.familyDraftName=''; } if(state.stage===2){ state.workItems=[]; state.workDraftName=''; } if(state.stage===3){ state.societyScores={}; state.customSocietyName=''; state.societySelected=societyPresets[0]; } if(state.stage===4){ state.selfAnswers={}; } render(); }
+function nextStage(){ state.error=''; state.stage=Math.min(5, state.stage + 1); render(); window.scrollTo({top:0, behavior:'smooth'}); }
+function currentQuestionInfo(){ const idx=selfQuestions.findIndex(q => !state.selfAnswers[q]); if(idx === -1) return {index:-1,q:null,options:[]}; const q=selfQuestions[idx]; if(q === beliefQuestion) return {index:idx,q,options:['Верю','Не верю']}; return {index:idx,q,options: yesNoQuestions.has(q) ? ynOptions : freqOptions}; }
+function addFamily(name, score){ const n=String(name || '').trim(); if(!n){ state.error='Сначала введи имя или степень родства.'; render(); return; } state.familyItems.push({name:n, score}); rememberName('family', n); state.familyDraftName=''; state.error=''; render(); }
+function addWork(name, score){ const n=String(name || '').trim(); if(!n){ state.error='Сначала введи роль или имя человека.'; render(); return; } state.workItems.push({name:n, score}); rememberName('work', n); state.workDraftName=''; state.error=''; render(); }
+function addCustomSociety(name, score){ const n=String(name || '').trim(); if(!n){ state.error='Сначала введи название своей категории.'; render(); return; } state.societyScores[n]=score; rememberName('society', n); state.customSocietyName=''; state.error=''; render(); }
+function shareText(){ return `Качество моей жизни:
 
-function restartAll(){
-  Object.assign(state, {stage:1, familyItems:[], workItems:[], familyDraftName:'', workDraftName:'', societySelected:societyPresets[0], societyScores:{}, customSocietyName:'', selfAnswers:{}, error:''});
-  render();
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-function resetCurrentStage(){
-  state.error = '';
-  if(state.stage===1){ state.familyItems=[]; state.familyDraftName=''; }
-  if(state.stage===2){ state.workItems=[]; state.workDraftName=''; }
-  if(state.stage===3){ state.societyScores={}; state.customSocietyName=''; state.societySelected=societyPresets[0]; }
-  if(state.stage===4){ state.selfAnswers={}; }
-  render();
-}
-function nextStage(){
-  state.error = '';
-  state.stage = Math.min(5, state.stage + 1);
-  render();
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-function currentQuestionInfo(){
-  const idx = selfQuestions.findIndex(q => !state.selfAnswers[q]);
-  if(idx === -1) return {index:-1,q:null,options:[]};
-  const q = selfQuestions[idx];
-  if(q === beliefQuestion) return {index:idx, q, options:['Верю','Не верю']};
-  return {index:idx, q, options: yesNoQuestions.has(q) ? ynOptions : freqOptions};
-}
-function addFamily(name, score){
-  const n = String(name || '').trim();
-  if(!n){ state.error='Сначала введи имя или степень родства.'; render(); return; }
-  state.familyItems.push({name:n, score});
-  rememberName('family', n);
-  state.familyDraftName = '';
-  state.error = '';
-  render();
-}
-function addWork(name, score){
-  const n = String(name || '').trim();
-  if(!n){ state.error='Сначала введи роль или имя человека.'; render(); return; }
-  state.workItems.push({name:n, score});
-  rememberName('work', n);
-  state.workDraftName = '';
-  state.error = '';
-  render();
-}
-function addCustomSociety(name, score){
-  const n = String(name || '').trim();
-  if(!n){ state.error='Сначала введи название своей категории.'; render(); return; }
-  state.societyScores[n] = score;
-  rememberName('society', n);
-  state.customSocietyName = '';
-  state.error = '';
-  render();
-}
-function shareText(){
-  return `Итого качество моей жизни\n\nКачество отношений с семьей: ${familyScore()}\nКачество отношений на работе: ${workScore()}\nКачество отношений с обществом: ${societyScore()}\nКачество отношений с самим собой: ${selfScore()}\n\nИтого Итого качество моей жизни ${totalScore()}`;
-}
-async function shareResult(){
-  const text = shareText();
-  try{
-    if(navigator.share){
-      await navigator.share({title:'Калькулятор выздоровления', text});
-      return;
-    }
-    openModal('Поделиться результатом', `<div class="sheetList"><button class="sheetBtn" id="copyFromSheetBtn">Скопировать текст результата</button></div>`);
-    document.getElementById('copyFromSheetBtn').onclick = copyResult;
-  }catch(e){}
-}
-async function copyResult(){
-  try{
-    await navigator.clipboard.writeText(shareText());
-    openModal('Скопировано', '<p>Текст результата скопирован. Теперь его можно вставить в Telegram или куда угодно.</p>');
-  }catch(e){
-    openModal('Текст результата', `<p>${esc(shareText()).replaceAll('\\n','<br>')}</p>`);
-  }
-}
-function openModal(title, bodyHtml){
-  document.getElementById('modalContent').innerHTML = `<h3>${title}</h3>${bodyHtml}`;
-  document.getElementById('modalWrap').classList.add('show');
-}
+Качество отношений с семьей: ${familyScore()}
+Качество отношений на работе: ${workScore()}
+Качество отношений с обществом: ${societyScore()}
+Качество отношений с самим собой: ${selfScore()}
+
+Итого качество моей жизни: ${totalScore()}`; }
+async function shareResult(){ const text=shareText(); try{ if(navigator.share){ await navigator.share({title:'Качество моей жизни', text}); return; } openModal('Поделиться результатом', `<div class="sheetList"><button class="sheetBtn" id="copyFromSheetBtn">Скопировать текст результата</button></div>`); document.getElementById('copyFromSheetBtn').onclick = copyResult; } catch(e){} }
+async function copyResult(){ try{ await navigator.clipboard.writeText(shareText()); openModal('Скопировано', '<p>Текст результата скопирован. Теперь его можно вставить в Telegram или куда угодно.</p>'); } catch(e){ openModal('Текст результата', `<p>${esc(shareText()).replaceAll('\n','<br>')}</p>`); } }
+function openModal(title, bodyHtml){ document.getElementById('modalContent').innerHTML = `<h3>${title}</h3>${bodyHtml}`; document.getElementById('modalWrap').classList.add('show'); }
 function closeModal(){ document.getElementById('modalWrap').classList.remove('show'); }
-
-function suggestionChips(group){
-  const names = getSavedNames(group);
-  if(!names.length) return '';
-  return `<div class="card"><div class="savedTitle">Сохранённые имена</div><div class="chips">${names.map(n=>`<button class="chip" data-suggest-group="${group}" data-suggest-name="${esc(n)}">${esc(n)}</button>`).join('')}</div></div>`;
-}
-function scoreGrid(kind, active=null){
-  const nums = Array.from({length:11}, (_,i)=>i);
-  return `<div class="scoreGrid">
-    ${nums.map(i=>`<button class="scoreBtn ${active===i?'active':''}" data-${kind}-score="${i}">${i}</button>`).join('')}
-  </div>`;
-}
-function actionBlock(){
-  return `<div class="actionRow"><button class="secondary" id="clearStageBtn">Очистить этап</button><button class="primary" id="nextBtn">Завершить этап</button></div>`;
-}
-function progressBlock(){
-  return `<div class="progressWrap"><div class="progressMeta"><div>${stageTitle()}</div><div>${state.stage} из 5</div></div><div class="progress"><div class="progressFill" style="width:${progressValue()}%"></div></div></div>`;
-}
-
-function renderFamily(){
-  return `<div class="screen">
-    <h1 class="stageTitle">Семья</h1>
-    <div class="stageMeta">Этап ${state.stage} из 5</div>
-    <div class="lead">Введи имя → выбери оценку</div>
-    ${suggestionChips('family')}
-    <div class="card">
-    <input id="familyName" name="family_relation_input" class="input" type="search" inputmode="search" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Например: Мама" value="${esc(state.familyDraftName)}" />
-      <div class="hint">Можно ввести имя или степень родства</div>
-      ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
-    </div>
-    <div class="card">
-      ${scoreGrid('family')}
-      ${actionBlock()}
-    </div>
-    ${progressBlock()}
-    ${state.familyItems.length ? `<div class="list">${state.familyItems.map(i=>`<div class="row"><div><div class="rowName">${esc(i.name)}</div><div class="rowMeta">Семья</div></div><div class="rowScore">${i.score}</div></div>`).join('')}</div>` : ''}
-  </div>`;
-}
-function renderWork(){
-  return `<div class="screen">
-    <h1 class="stageTitle">Работа / учёба</h1>
-    <div class="stageMeta">Этап ${state.stage} из 5</div>
-    <div class="lead">Введи роль или имя → выбери оценку</div>
-    ${suggestionChips('work')}
-    <div class="card">
-      <input
-  id="workName"
-  class="input"
-  type="text"
-  inputmode="text"
-  autocomplete="new-password"
-  autocorrect="off"
-  autocapitalize="words"
-  spellcheck="false" placeholder="Например: Начальник" value="${esc(state.workDraftName)}" />
-      <div class="hint">Можно ввести имя или роль</div>
-      ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
-    </div>
-    <div class="card">
-      ${scoreGrid('work')}
-      ${actionBlock()}
-    </div>
-    ${progressBlock()}
-    ${state.workItems.length ? `<div class="list">${state.workItems.map(i=>`<div class="row"><div><div class="rowName">${esc(i.name)}</div><div class="rowMeta">Работа / учёба</div></div><div class="rowScore">${i.score}</div></div>`).join('')}</div>` : ''}
-  </div>`;
-}
-function renderSociety(){
-  const selectedScore = Object.prototype.hasOwnProperty.call(state.societyScores, state.societySelected) ? state.societyScores[state.societySelected] : null;
-  return `<div class="screen">
-    <h1 class="stageTitle">Общество</h1>
-    <div class="stageMeta">Этап ${state.stage} из 5</div>
-    <div class="lead">Выбери категорию → поставь оценку</div>
-    <div class="card"><div class="chips">${societyPresets.map(n=>`<button class="chip ${state.societySelected===n?'activeChip':''}" data-preset="${esc(n)}">${esc(n)}</button>`).join('')}</div></div>
-    <div class="card" id="societyScoreCard">
-      <div class="savedTitle">Оценка: ${esc(state.societySelected)}</div>
-      <button class="secondary small" id="skipSocietyBtn">Пропустить</button>
-      <div style="margin-top:10px">${scoreGrid('society', selectedScore)}</div>
-    </div>
-    ${suggestionChips('society')}
-    <div class="card">
-      <input
-  id="customSocietyName"
-  class="input"
-  type="text"
-  inputmode="text"
-  autocomplete="new-password"
-  autocorrect="off"
-  autocapitalize="words"
-  spellcheck="false" placeholder="Своя категория" value="${esc(state.customSocietyName)}" />
-      ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
-      <div class="scoreAnchor">Оценка для своей категории</div>
-      <div style="margin-top:10px">${scoreGrid('custom')}</div>
-      ${actionBlock()}
-    </div>
-    ${progressBlock()}
-    ${Object.keys(state.societyScores).length ? `<div class="list">${Object.entries(state.societyScores).map(([k,v])=>`<div class="row"><div><div class="rowName">${esc(k)}</div><div class="rowMeta">Общество</div></div><div class="rowScore">${v===-1?'—':v}</div></div>`).join('')}</div>` : ''}
-  </div>`;
-}
-function renderSelf(){
-  const q = currentQuestionInfo();
-  return `<div class="screen">
-    <h1 class="stageTitle">Качество отношений с самим собой</h1>
-    <div class="stageMeta">Этап ${state.stage} из 5</div>
-    <div class="lead">Отвечай на один вопрос за раз</div>
-    <div class="card">
-      ${q.q ? `<div class="questionNo">Вопрос ${q.index+1} из ${selfQuestions.length}</div><div class="questionText">${esc(q.q)}</div><div class="answers">${q.options.map(o=>`<button data-answer="${esc(o)}">${esc(o)}</button>`).join('')}</div>` : `<div class="questionText">Все вопросы заполнены</div>`}
-      ${actionBlock()}
-    </div>
-    ${progressBlock()}
-  </div>`;
-}
-function renderResult(){
-  return `<div class="screen">
-    <h1 class="stageTitle">Качество моего выздоровления</h1>
-    <div class="stageMeta">Этап ${state.stage} из 5</div>
-    <div class="lead">Только текущий срез на сегодня</div>
-    <div class="hero"><div class="heroBig">${totalScore()}</div><div class="heroSub">Итого качество моей жизни
-</div></div>
-    <div class="summaryGrid">
-      <div class="summaryCard ${scoreTone(familyScore())}"><div class="summaryKey">Качество отношений с семьей</div><div class="summaryVal">${familyScore()}</div></div>
-      <div class="summaryCard ${scoreTone(workScore())}"><div class="summaryKey">Качество отношений на работе</div><div class="summaryVal">${workScore()}</div></div>
-      <div class="summaryCard ${scoreTone(societyScore())}"><div class="summaryKey">Качество отношений с обществом</div><div class="summaryVal">${societyScore()}</div></div>
-      <div class="summaryCard ${scoreTone(selfScore())}"><div class="summaryKey">Качество отношений с самим собой</div><div class="summaryVal">${selfScore()}</div></div>
-    </div>
-    <div class="shareBox"><button class="shareSecondary" id="shareBtn"><span class="shareIcon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path><path d="M8 9l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 19h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span><span>Поделиться результатом</span></button></div>
-    ${progressBlock()}
-  </div>`;
-}
-
+function suggestionChips(group){ const names=getSavedNames(group); if(!names.length) return ''; return `<div class="card"><div class="savedTitle">Сохранённые имена</div><div class="chips">${names.map(n=>`<button class="chip" data-suggest-group="${group}" data-suggest-name="${esc(n)}">${esc(n)}</button>`).join('')}</div></div>`; }
+function scoreGrid(kind, active=null){ const nums=Array.from({length:11}, (_,i)=>i); return `<div class="scoreGrid">${nums.map(i=>`<button class="scoreBtn ${active===i?'active':''}" data-${kind}-score="${i}">${i}</button>`).join('')}</div>`; }
+function actionBlock(){ return `<div class="actionRow"><button class="secondary" id="clearStageBtn">Очистить этап</button><button class="primary" id="nextBtn">Завершить этап</button></div>`; }
+function progressBlock(){ return `<div class="progressWrap"><div class="progressMeta"><div>${stageTitle()}</div><div>${state.stage} из 5</div></div><div class="progress"><div class="progressFill" style="width:${progressValue()}%"></div></div></div>`; }
+function renderFamily(){ return `<div class="screen"><h1 class="stageTitle">Семья</h1><div class="stageMeta">Этап ${state.stage} из 5</div><div class="lead">Введи имя → выбери оценку</div>${suggestionChips('family')}<div class="card"><input id="familyName" name="family_relation_input" class="input" type="search" inputmode="search" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Например: Мама" value="${esc(state.familyDraftName)}" /><div class="hint">Можно ввести имя или степень родства</div>${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}</div><div class="card">${scoreGrid('family')}${actionBlock()}</div>${progressBlock()}${state.familyItems.length ? `<div class="list">${state.familyItems.map(i=>`<div class="row"><div><div class="rowName">${esc(i.name)}</div><div class="rowMeta">Семья</div></div><div class="rowScore">${i.score}</div></div>`).join('')}</div>` : ''}</div>`; }
+function renderWork(){ return `<div class="screen"><h1 class="stageTitle">Работа / учёба</h1><div class="stageMeta">Этап ${state.stage} из 5</div><div class="lead">Введи роль или имя → выбери оценку</div>${suggestionChips('work')}<div class="card"><input id="workName" name="work_relation_input" class="input" type="search" inputmode="search" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Например: Начальник" value="${esc(state.workDraftName)}" /><div class="hint">Можно ввести имя или роль</div>${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}</div><div class="card">${scoreGrid('work')}${actionBlock()}</div>${progressBlock()}${state.workItems.length ? `<div class="list">${state.workItems.map(i=>`<div class="row"><div><div class="rowName">${esc(i.name)}</div><div class="rowMeta">Работа / учёба</div></div><div class="rowScore">${i.score}</div></div>`).join('')}</div>` : ''}</div>`; }
+function renderSociety(){ const selectedScore=Object.prototype.hasOwnProperty.call(state.societyScores, state.societySelected) ? state.societyScores[state.societySelected] : null; return `<div class="screen"><h1 class="stageTitle">Общество</h1><div class="stageMeta">Этап ${state.stage} из 5</div><div class="lead">Выбери категорию → поставь оценку</div><div class="card"><div class="chips">${societyPresets.map(n=>`<button class="chip ${state.societySelected===n?'activeChip':''}" data-preset="${esc(n)}">${esc(n)}</button>`).join('')}</div></div><div class="card" id="societyScoreCard"><div class="savedTitle">Оценка: ${esc(state.societySelected)}</div><button class="secondary small" id="skipSocietyBtn">Пропустить</button><div style="margin-top:10px">${scoreGrid('society', selectedScore)}</div></div>${suggestionChips('society')}<div class="card"><input id="customSocietyName" name="society_custom_input" class="input" type="search" inputmode="search" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Своя категория" value="${esc(state.customSocietyName)}" />${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}<div class="scoreAnchor">Оценка для своей категории</div><div style="margin-top:10px">${scoreGrid('custom')}</div>${actionBlock()}</div>${progressBlock()}${Object.keys(state.societyScores).length ? `<div class="list">${Object.entries(state.societyScores).map(([k,v])=>`<div class="row"><div><div class="rowName">${esc(k)}</div><div class="rowMeta">Общество</div></div><div class="rowScore">${v===-1?'—':v}</div></div>`).join('')}</div>` : ''}</div>`; }
+function renderSelf(){ const q=currentQuestionInfo(); return `<div class="screen"><h1 class="stageTitle">Качество отношений с самим собой</h1><div class="stageMeta">Этап ${state.stage} из 5</div><div class="lead">Отвечай на один вопрос за раз</div><div class="card">${q.q ? `<div class="questionNo">Вопрос ${q.index+1} из ${selfQuestions.length}</div><div class="questionText">${esc(q.q)}</div><div class="answers">${q.options.map(o=>`<button data-answer="${esc(o)}">${esc(o)}</button>`).join('')}</div>` : `<div class="questionText">Все вопросы заполнены</div>`}${actionBlock()}</div>${progressBlock()}</div>`; }
+function renderResult(){ return `<div class="screen"><h1 class="stageTitle">Качество моей жизни</h1><div class="stageMeta">Этап ${state.stage} из 5</div><div class="lead">Только текущий срез на сегодня</div><div class="hero"><div class="heroBig">${totalScore()}</div><div class="heroSub">Итого качество моей жизни</div></div><div class="summaryGrid"><div class="summaryCard ${scoreTone(familyScore())}"><div class="summaryKey">Качество отношений с семьей</div><div class="summaryVal">${familyScore()}</div></div><div class="summaryCard ${scoreTone(workScore())}"><div class="summaryKey">Качество отношений на работе</div><div class="summaryVal">${workScore()}</div></div><div class="summaryCard ${scoreTone(societyScore())}"><div class="summaryKey">Качество отношений с обществом</div><div class="summaryVal">${societyScore()}</div></div><div class="summaryCard ${scoreTone(selfScore())}"><div class="summaryKey">Качество отношений с самим собой</div><div class="summaryVal">${selfScore()}</div></div></div><div class="shareBox"><button class="shareSecondary" id="shareBtn"><span class="shareIcon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path><path d="M8 9l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 19h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span><span>Поделиться результатом</span></button></div>${progressBlock()}</div>`; }
 function bindGlobalUI(){
   document.getElementById('restartTop').onclick = restartAll;
   document.getElementById('closeModal').onclick = closeModal;
   document.getElementById('modalWrap').onclick = e => { if(e.target.id === 'modalWrap') closeModal(); };
-
   document.getElementById('menuBtn').onclick = () => {
-    openModal('Меню', `<div class="sheetList">
-      <button class="sheetBtn" id="openHintsBtn">Подсказки</button>
-      <button class="sheetBtn" id="openInstructionBtn">Инструкция</button>
-      <button class="sheetBtn" id="openSupportBtn">Поддержка</button>
-    </div>`);
-    document.getElementById('openHintsBtn').onclick = () => {
-      openModal('Подсказки', `
-        <p>Короткие пояснения для первого знакомства.</p>
-        <div class="guideItem"><strong>Семья</strong>Введи имя или степень родства и выбери оценку.</div>
-        <div class="guideItem"><strong>Работа / учёба</strong>Введи роль, имя или короткое описание человека и выбери оценку.</div>
-        <div class="guideItem"><strong>Общество</strong>Выбери готовую категорию или добавь свою.</div>
-        <div class="guideItem"><strong>Качество отношений с самим собой</strong>Отвечай на вопросы по одному.</div>
-        <div class="guideItem"><strong>Имена</strong>Сохранённые имена можно использовать повторно через кнопку «Имена» внизу.</div>
-      `);
-    };
-    document.getElementById('openInstructionBtn').onclick = () => {
-      const body = VIDEO_URL ? `<p>Ниже можно открыть инструкцию.</p><a class="primary" style="width:100%" href="${VIDEO_URL}" target="_blank" rel="noopener">Открыть инструкцию</a>` : `<p>${VIDEO_TEXT}</p><p>Можно добавить сюда ссылку на видео или текстовый гайд.</p>`;
-      openModal('Инструкция', body);
-    };
-    document.getElementById('openSupportBtn').onclick = () => {
-      const body = SUPPORT_URL ? `<p>Ниже можно перейти за поддержкой.</p><a class="primary" style="width:100%" href="${SUPPORT_URL}" target="_blank" rel="noopener">Открыть поддержку</a>` : `<p>${SUPPORT_TEXT}</p><p>Можно добавить сюда ссылку на группу поддержки или контакты куратора.</p>`;
-      openModal('Поддержка', body);
-    };
+    openModal('Меню', `<div class="sheetList"><button class="sheetBtn" id="openHintsBtn">Подсказки</button><button class="sheetBtn" id="openInstructionBtn">Инструкция</button><button class="sheetBtn" id="openSupportBtn">Поддержка</button></div>`);
+    document.getElementById('openHintsBtn').onclick = () => openModal('Подсказки', `<p>Короткие пояснения для первого знакомства.</p><div class="guideItem"><strong>Семья</strong>Введи имя или степень родства и выбери оценку.</div><div class="guideItem"><strong>Работа / учёба</strong>Введи роль, имя или короткое описание человека и выбери оценку.</div><div class="guideItem"><strong>Общество</strong>Выбери готовую категорию или добавь свою.</div><div class="guideItem"><strong>Качество отношений с самим собой</strong>Отвечай на вопросы по одному.</div><div class="guideItem"><strong>Имена</strong>Сохранённые имена можно использовать повторно через кнопку «Имена» внизу.</div>`);
+    document.getElementById('openInstructionBtn').onclick = () => openModal('Инструкция', VIDEO_URL ? `<p>Ниже можно открыть инструкцию.</p><a class="primary" style="width:100%" href="${VIDEO_URL}" target="_blank" rel="noopener">Открыть инструкцию</a>` : `<p>${VIDEO_TEXT}</p><p>Можно добавить сюда ссылку на видео или текстовый гайд.</p>`);
+    document.getElementById('openSupportBtn').onclick = () => openModal('Поддержка', SUPPORT_URL ? `<p>Ниже можно перейти за поддержкой.</p><a class="primary" style="width:100%" href="${SUPPORT_URL}" target="_blank" rel="noopener">Открыть поддержку</a>` : `<p>${SUPPORT_TEXT}</p><p>Можно добавить сюда ссылку на группу поддержки или контакты куратора.</p>`);
   };
-
   document.getElementById('memoryBtn').onclick = () => {
-    const family = getSavedNames('family'), work = getSavedNames('work'), society = getSavedNames('society');
-    const block = (title, group, items) => `<div style="margin-top:12px"><div class="savedTitle">${title}</div>${items.length ? items.map(name=>`<div class="memoryItem"><div>${esc(name)}</div><button class="tinyBtn" data-remove-memory="${group}" data-remove-name="${esc(name)}">Удалить</button></div>`).join('') : `<div class="empty">Пока пусто</div>`}</div>`;
+    const family=getSavedNames('family'), work=getSavedNames('work'), society=getSavedNames('society');
+    const block=(title,group,items)=>`<div style="margin-top:12px"><div class="savedTitle">${title}</div>${items.length ? items.map(name=>`<div class="memoryItem"><div>${esc(name)}</div><button class="tinyBtn" data-remove-memory="${group}" data-remove-name="${esc(name)}">Удалить</button></div>`).join('') : `<div class="empty">Пока пусто</div>`}</div>`;
     openModal('Имена', `<p>Здесь хранятся подсказки имён и категорий для следующих прохождений.</p>${block('Семья','family',family)}${block('Работа / учёба','work',work)}${block('Свои категории','society',society)}<button class="danger" id="clearAllMemoryBtn" style="width:100%;margin-top:16px">Удалить все имена из памяти</button>`);
     document.querySelectorAll('[data-remove-memory]').forEach(btn => btn.onclick = () => { removeSavedName(btn.dataset.removeMemory, btn.dataset.removeName); document.getElementById('memoryBtn').click(); });
     document.getElementById('clearAllMemoryBtn').onclick = () => { clearAllSavedNames(); closeModal(); openModal('Имена очищены', '<p>Все сохранённые имена и свои категории удалены из памяти устройства.</p>'); render(); };
   };
 }
-function bindSuggestions(){
-  document.querySelectorAll('[data-suggest-group]').forEach(btn => btn.onclick = () => {
-    const g = btn.dataset.suggestGroup, n = btn.dataset.suggestName;
-    if(g === 'family'){ state.familyDraftName = n; render(); }
-    if(g === 'work'){ state.workDraftName = n; render(); }
-    if(g === 'society'){ state.customSocietyName = n; render(); }
-  });
-}
+function bindSuggestions(){ document.querySelectorAll('[data-suggest-group]').forEach(btn => btn.onclick = () => { const g=btn.dataset.suggestGroup, n=btn.dataset.suggestName; if(g === 'family'){ state.familyDraftName=n; render(); } if(g === 'work'){ state.workDraftName=n; render(); } if(g === 'society'){ state.customSocietyName=n; render(); } }); }
 function render(){
-  const root = document.getElementById('appRoot');
+  const root=document.getElementById('appRoot');
   if(state.stage === 1) root.innerHTML = renderFamily();
   if(state.stage === 2) root.innerHTML = renderWork();
   if(state.stage === 3) root.innerHTML = renderSociety();
   if(state.stage === 4) root.innerHTML = renderSelf();
   if(state.stage === 5) root.innerHTML = renderResult();
-
   bindGlobalUI();
   bindSuggestions();
-
-  if(state.stage !== 5){
-    document.getElementById('clearStageBtn').onclick = resetCurrentStage;
-    document.getElementById('nextBtn').onclick = nextStage;
-  }
+  if(state.stage !== 5){ document.getElementById('clearStageBtn').onclick = resetCurrentStage; document.getElementById('nextBtn').onclick = nextStage; }
   if(state.stage === 1){
-    const input = document.getElementById('familyName');
-    // autofocus disabled to avoid password manager popup
+    const input=document.getElementById('familyName');
     input.oninput = e => state.familyDraftName = e.target.value;
     document.querySelectorAll('[data-family-score]').forEach(btn => btn.onclick = () => addFamily(state.familyDraftName, Number(btn.dataset.familyScore)));
   }
   if(state.stage === 2){
-    const input = document.getElementById('workName');
-    // autofocus disabled to avoid password manager popup
+    const input=document.getElementById('workName');
     input.oninput = e => state.workDraftName = e.target.value;
     document.querySelectorAll('[data-work-score]').forEach(btn => btn.onclick = () => addWork(state.workDraftName, Number(btn.dataset.workScore)));
   }
   if(state.stage === 3){
-    document.querySelectorAll('[data-preset]').forEach(btn => btn.onclick = () => {
-      state.societySelected = btn.dataset.preset; state.error=''; render();
-      setTimeout(() => {
-        const card = document.getElementById('societyScoreCard');
-        if(card){
-          card.scrollIntoView({behavior:'smooth', block:'center'});
-          card.style.boxShadow = '0 0 0 3px rgba(10,132,255,.12), 0 8px 24px rgba(17,17,17,.04)';
-          setTimeout(() => { card.style.boxShadow = ''; }, 500);
-        }
-      }, 30);
-    });
+    document.querySelectorAll('[data-preset]').forEach(btn => btn.onclick = () => { state.societySelected = btn.dataset.preset; state.error=''; render(); setTimeout(() => { const card=document.getElementById('societyScoreCard'); if(card){ card.scrollIntoView({behavior:'smooth', block:'center'}); card.style.boxShadow='0 0 0 3px rgba(10,132,255,.12), 0 8px 24px rgba(17,17,17,.04)'; setTimeout(() => { card.style.boxShadow=''; }, 500); } }, 30); });
     document.querySelectorAll('[data-society-score]').forEach(btn => btn.onclick = () => { state.societyScores[state.societySelected] = Number(btn.dataset.societyScore); state.error=''; render(); });
     document.querySelectorAll('[data-custom-score]').forEach(btn => btn.onclick = () => addCustomSociety(state.customSocietyName, Number(btn.dataset.customScore)));
     document.getElementById('skipSocietyBtn').onclick = () => { state.societyScores[state.societySelected] = -1; state.error=''; render(); };
     document.getElementById('customSocietyName').oninput = e => state.customSocietyName = e.target.value;
   }
   if(state.stage === 4){
-    document.querySelectorAll('[data-answer]').forEach(btn => btn.onclick = () => {
-      const q = currentQuestionInfo().q;
-      if(q){ state.selfAnswers[q] = btn.dataset.answer; state.error=''; render(); }
-    });
+    document.querySelectorAll('[data-answer]').forEach(btn => btn.onclick = () => { const q=currentQuestionInfo().q; if(q){ state.selfAnswers[q] = btn.dataset.answer; state.error=''; render(); } });
   }
-  if(state.stage === 5){
-    document.getElementById('shareBtn').onclick = shareResult;
-  }
+  if(state.stage === 5){ document.getElementById('shareBtn').onclick = shareResult; }
 }
 render();
 </script>
