@@ -451,7 +451,15 @@ function renderWork(){
     <div class="lead">Введи роль или имя → выбери оценку</div>
     ${suggestionChips('work')}
     <div class="card">
-      <input id="workName" class="input" type="text" placeholder="Например: Начальник" value="${esc(state.workDraftName)}" />
+      <input
+  id="workName"
+  class="input"
+  type="text"
+  inputmode="text"
+  autocomplete="new-password"
+  autocorrect="off"
+  autocapitalize="words"
+  spellcheck="false" placeholder="Например: Начальник" value="${esc(state.workDraftName)}" />
       <div class="hint">Можно ввести имя или роль</div>
       ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
     </div>
@@ -477,7 +485,15 @@ function renderSociety(){
     </div>
     ${suggestionChips('society')}
     <div class="card">
-      <input id="customSocietyName" class="input" type="text" placeholder="Своя категория" value="${esc(state.customSocietyName)}" />
+      <input
+  id="customSocietyName"
+  class="input"
+  type="text"
+  inputmode="text"
+  autocomplete="new-password"
+  autocorrect="off"
+  autocapitalize="words"
+  spellcheck="false" placeholder="Своя категория" value="${esc(state.customSocietyName)}" />
       ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
       <div class="scoreAnchor">Оценка для своей категории</div>
       <div style="margin-top:10px">${scoreGrid('custom')}</div>
