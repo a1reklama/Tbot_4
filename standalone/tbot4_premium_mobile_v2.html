@@ -432,7 +432,7 @@ function renderFamily(){
     <div class="lead">Введи имя → выбери оценку</div>
     ${suggestionChips('family')}
     <div class="card">
-    <input id="familyName" class="input" type="text" inputmode="text" autocomplete="new-password" autocorrect="off" autocapitalize="words" spellcheck="false" placeholder="Например: Мама" value="${esc(state.familyDraftName)}" />
+    <input id="familyName" name="family_relation_input" class="input" type="search" inputmode="search" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" data-lpignore="true" data-form-type="other" placeholder="Например: Мама" value="${esc(state.familyDraftName)}" />
       <div class="hint">Можно ввести имя или степень родства</div>
       ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
     </div>
@@ -598,13 +598,13 @@ function render(){
   }
   if(state.stage === 1){
     const input = document.getElementById('familyName');
-    setTimeout(() => input.focus(), 50);
+    // autofocus disabled to avoid password manager popup
     input.oninput = e => state.familyDraftName = e.target.value;
     document.querySelectorAll('[data-family-score]').forEach(btn => btn.onclick = () => addFamily(state.familyDraftName, Number(btn.dataset.familyScore)));
   }
   if(state.stage === 2){
     const input = document.getElementById('workName');
-    setTimeout(() => input.focus(), 50);
+    // autofocus disabled to avoid password manager popup
     input.oninput = e => state.workDraftName = e.target.value;
     document.querySelectorAll('[data-work-score]').forEach(btn => btn.onclick = () => addWork(state.workDraftName, Number(btn.dataset.workScore)));
   }
