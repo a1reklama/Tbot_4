@@ -75,6 +75,8 @@
       min-height:34px;padding:0 12px;border-radius:999px;border:none;
       background:rgba(10,132,255,.12);color:#0066cc;font-size:14px;font-weight:600
     }
+    .chip.activeChip{background:rgba(10,132,255,.20);color:#004ea8;box-shadow:inset 0 0 0 1px rgba(10,132,255,.22)}
+    .scoreAnchor{font-size:13px;color:var(--muted);margin-bottom:8px}
     .scoreGrid{
       display:grid;
       grid-template-columns:repeat(4,minmax(0,1fr));
@@ -93,6 +95,7 @@
       font-size:16px;font-weight:600;display:inline-flex;align-items:center;justify-content:center
     }
     .primary{background:var(--blue);color:#fff}
+    .shareSecondary{background:#f1f1f4;color:var(--blue);border:1px solid rgba(10,132,255,.12);justify-content:flex-start;gap:8px;padding:0 14px}
     .secondary{background:#f1f1f4;color:var(--text)}
     .danger{background:#fff;border:1px solid rgba(201,52,47,.18);color:var(--danger)}
     .small{min-height:40px;border-radius:14px;font-size:15px}
@@ -419,8 +422,8 @@ function renderSociety(){
     <div class="stageMeta">Этап ${state.stage} из 5</div>
     <div class="lead">Выбери категорию → поставь оценку</div>
     <div class="card"><div class="chips">${societyPresets.map(n=>`<button class="chip ${state.societySelected===n?'activeChip':''}" data-preset="${esc(n)}">${esc(n)}</button>`).join('')}</div></div>
-    <div class="card">
-      <div class="savedTitle">${esc(state.societySelected)}</div>
+    <div class="card" id="societyScoreCard">
+      <div class="savedTitle">Оценка: ${esc(state.societySelected)}</div>
       <button class="secondary small" id="skipSocietyBtn">Пропустить</button>
       <div style="margin-top:10px">${scoreGrid('society', selectedScore)}</div>
     </div>
@@ -428,6 +431,7 @@ function renderSociety(){
     <div class="card">
       <input id="customSocietyName" class="input" type="text" placeholder="Своя категория" value="${esc(state.customSocietyName)}" />
       ${state.error ? `<div class="error">${esc(state.error)}</div>` : ''}
+      <div class="scoreAnchor">Оценка для своей категории</div>
       <div style="margin-top:10px">${scoreGrid('custom')}</div>
       ${actionBlock()}
     </div>
@@ -460,7 +464,7 @@ function renderResult(){
       <div class="summaryCard ${scoreTone(societyScore())}"><div class="summaryKey">Выздоровление в обществе</div><div class="summaryVal">${societyScore()}</div></div>
       <div class="summaryCard ${scoreTone(selfScore())}"><div class="summaryKey">Личное выздоровление</div><div class="summaryVal">${selfScore()}</div></div>
     </div>
-    <div class="shareBox"><button class="primary" id="shareBtn">Поделиться результатом</button></div>
+    <div class="shareBox"><button class="shareSecondary" id="shareBtn"><span class="shareIcon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 16V5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path><path d="M8 9l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5 19h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span><span>Поделиться результатом</span></button></div>
     ${progressBlock()}
   </div>`;
 }
@@ -540,7 +544,17 @@ function render(){
     document.querySelectorAll('[data-work-score]').forEach(btn => btn.onclick = () => addWork(state.workDraftName, Number(btn.dataset.workScore)));
   }
   if(state.stage === 3){
-    document.querySelectorAll('[data-preset]').forEach(btn => btn.onclick = () => { state.societySelected = btn.dataset.preset; state.error=''; render(); });
+    document.querySelectorAll('[data-preset]').forEach(btn => btn.onclick = () => {
+      state.societySelected = btn.dataset.preset; state.error=''; render();
+      setTimeout(() => {
+        const card = document.getElementById('societyScoreCard');
+        if(card){
+          card.scrollIntoView({behavior:'smooth', block:'center'});
+          card.style.boxShadow = '0 0 0 3px rgba(10,132,255,.12), 0 8px 24px rgba(17,17,17,.04)';
+          setTimeout(() => { card.style.boxShadow = ''; }, 500);
+        }
+      }, 30);
+    });
     document.querySelectorAll('[data-society-score]').forEach(btn => btn.onclick = () => { state.societyScores[state.societySelected] = Number(btn.dataset.societyScore); state.error=''; render(); });
     document.querySelectorAll('[data-custom-score]').forEach(btn => btn.onclick = () => addCustomSociety(state.customSocietyName, Number(btn.dataset.customScore)));
     document.getElementById('skipSocietyBtn').onclick = () => { state.societyScores[state.societySelected] = -1; state.error=''; render(); };
