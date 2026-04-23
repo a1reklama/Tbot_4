@@ -148,7 +148,7 @@ function shareText(){ return `Качество моей жизни:
 Качество отношений с обществом: ${societyScore()}
 Качество отношений с самим собой: ${selfScore()}
 Итого качество моей жизни: ${totalScore()}`; }
-async function shareResult(){ const text=shareText(); try{ if(navigator.share){ await navigator.share({title:'Качество моей жизни', text}); return; } openModal('Поделиться результатом', `<div class="sheetList"><button class="sheetBtn" id="copyFromSheetBtn">Скопировать текст результата</button></div>`); document.getElementById('copyFromSheetBtn').onclick = copyResult; } catch(e){} }
+async function shareResult(){ const text=shareText(); try{ if(navigator.share){ await navigator.share({ text }); return; } openModal('Поделиться результатом', `<div class="sheetList"><button class="sheetBtn" id="copyFromSheetBtn">Скопировать текст результата</button></div>`); document.getElementById('copyFromSheetBtn').onclick = copyResult; } catch(e){} }
 async function copyResult(){ try{ await navigator.clipboard.writeText(shareText()); openModal('Скопировано', '<p>Текст результата скопирован. Теперь его можно вставить в Telegram или куда угодно.</p>'); } catch(e){ openModal('Текст результата', `<p>${esc(shareText()).replaceAll('\n','<br>')}</p>`); } }
 function openModal(title, bodyHtml){ document.getElementById('modalContent').innerHTML = `<h3>${title}</h3>${bodyHtml}`; document.getElementById('modalWrap').classList.add('show'); }
 function closeModal(){ document.getElementById('modalWrap').classList.remove('show'); }
